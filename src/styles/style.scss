@@ -1,0 +1,45 @@
+@import './variables/_index.scss';
+@import './mixins/_index.scss';
+@import './shared/_index.scss';
+
+@import url("https://fonts.googleapis.com/css2?family=Alice&display=swap");
+
+$background-color: #eee;
+
+* {
+  font-family: "Alice", serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+
+.main {
+  margin-top: 60px;
+  background: $background-color;
+  min-height: $h-full;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 600px) {
+  .hiddenMobile {
+    visibility: hidden;
+    clear: both;
+    float: left;
+    margin: 10px auto 5px 20px;
+    width: 28%;
+    display: none;
+  }
+}
