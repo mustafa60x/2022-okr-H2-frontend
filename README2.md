@@ -5,3 +5,6 @@ npm create vite@latest ./ -- --template react-ts
 
 ## Bottstrap
 npm install react-bootstrap bootstrap
+
+## React Router
+npm i react-router-dom
