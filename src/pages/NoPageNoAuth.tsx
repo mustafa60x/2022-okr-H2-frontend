@@ -1,7 +1,7 @@
 import Container from "../components/Container";
 import NavbarNoAuth from "../components/NavbarNoAuth";
 
-const Login = () => {
+const NoPageNoAuth = () => {
   return (
     <>
       <div>
@@ -9,11 +9,16 @@ const Login = () => {
       </div>
       <div className="main">
         <Container>
-          <h1>Login Page</h1>
+          <div>
+            <span className="text-6xl">404</span>
+
+            <p>Page not found! (No Auth)</p>
+
+          </div>
         </Container>
       </div>
     </>
   );
 };
 
-export default Login;
+export default NoPageNoAuth;

@@ -1,12 +1,24 @@
+import Container from "../components/Container";
+import Navbar from "../components/Navbar";
+
 const NoPage = () => {
   return (
-    <div>
-      <h1>404</h1>
+    <>
+      <div>
+        <Navbar></Navbar>
+      </div>
+      <div className="main">
+        <Container>
+          <div>
+            <span className="text-6xl">404</span>
 
-      <p>Page not found!</p>
+            <p>Page not found!</p>
 
-    </div>
-  )
+          </div>
+        </Container>
+      </div>
+    </>
+  );
 };
 
 export default NoPage;

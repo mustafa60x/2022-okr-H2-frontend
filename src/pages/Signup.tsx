@@ -1,11 +1,11 @@
 import Container from "../components/Container";
-import Navbar from "../components/Navbar";
+import NavbarNoAuth from "../components/NavbarNoAuth";
 
 const Signup = () => {
   return (
     <>
       <div>
-        <Navbar></Navbar>
+        <NavbarNoAuth></NavbarNoAuth>
       </div>
       <div className="main">
         <Container>
