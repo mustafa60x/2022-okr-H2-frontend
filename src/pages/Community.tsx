@@ -24,6 +24,11 @@ const Community = (props) => {
         mustafa türköz
       </Modal> }
 
+      <div className="bg-red-500">
+        <h3 className="text-xl font-semibold text-gray-400">Tailwind Başlık</h3>
+
+        <button className="text-white/50 bg-green-400 hover:bg-red-600">Button</button>
+      </div>
       
     </div>
   );

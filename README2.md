@@ -8,3 +8,8 @@ npm install react-bootstrap bootstrap
 
 ## React Router
 npm i react-router-dom
+
+## Tailwind
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
