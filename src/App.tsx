@@ -1,8 +1,3 @@
-import Container from "./components/Container";
-import Navbar from "./components/Navbar";
-
-import Test from "./Test";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Community from "./pages/Community";
