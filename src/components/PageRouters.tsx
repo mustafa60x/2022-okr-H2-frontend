@@ -11,6 +11,7 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 
 import { useAuth } from "../context";
+import AuthLayout from "../pages/AuthLayout";
 
 function PageRouters() {
   const { isAuth } = useAuth() as any
@@ -20,15 +21,17 @@ function PageRouters() {
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<Layout />}>
-                <Route index element={isAuth ? <Community /> : (<Navigate to="/login"/>)} />
-                <Route path="community" element={isAuth ? <Community /> : (<Navigate to="/login"/>)} />
-                <Route path="messages" element={isAuth ? <Messages /> : (<Navigate to="/login"/>)} />
-                <Route path="profile" element={isAuth ? <Profile /> : (<Navigate to="/login"/>)} />
-                <Route path="profile/:id" element={isAuth ? <ProfileDetail /> : (<Navigate to="/login"/>)} />
+                <Route index element={isAuth ? <Community /> : (<Navigate to="/auth/login"/>)} />
+                <Route path="community" element={isAuth ? <Community /> : (<Navigate to="/auth/login"/>)} />
+                <Route path="messages" element={isAuth ? <Messages /> : (<Navigate to="/auth/login"/>)} />
+                <Route path="profile" element={isAuth ? <Profile /> : (<Navigate to="/auth/login"/>)} />
+                <Route path="profile/:id" element={isAuth ? <ProfileDetail /> : (<Navigate to="/auth/login"/>)} />
             </Route>
             
-            <Route path="login" element={isAuth ? (<Navigate to="/community"/>) : <Login />} />
-            <Route path="signup" element={isAuth ? (<Navigate to="/community"/>) : <Signup />} />
+            <Route path="/auth" element={isAuth ? (<Navigate to="/community"/>) : <AuthLayout />}>
+              <Route path="login" element={isAuth ? (<Navigate to="/community"/>) : <Login />} />
+              <Route path="signup" element={isAuth ? (<Navigate to="/community"/>) : <Signup />} />
+            </Route>
             
             <Route path="*" element={isAuth ? (<NoPage />) : <NoPageNoAuth />} />
         </Routes>

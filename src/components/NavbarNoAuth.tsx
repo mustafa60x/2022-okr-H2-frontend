@@ -15,10 +15,10 @@ function Navbar() {
 
         <ul className={styles.mainMenu}>
             <li>
-              <NavLink to="/login" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Login</NavLink>
+              <NavLink to="/auth/login" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Login</NavLink>
             </li>
             <li>
-              <NavLink to="/signup" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Signup</NavLink>
+              <NavLink to="/auth/signup" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Signup</NavLink>
             </li>
         </ul>
       </div>
