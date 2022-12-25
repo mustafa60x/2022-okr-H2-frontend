@@ -1,6 +1,6 @@
 import styles from './NavbarNoAuth.module.scss';
 
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
 
@@ -15,10 +15,10 @@ function Navbar() {
 
         <ul className={styles.mainMenu}>
             <li>
-              <Link to="/login">Login</Link>
+              <NavLink to="/login" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Login</NavLink>
             </li>
             <li>
-              <Link to="/signup">Signup</Link>
+              <NavLink to="/signup" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Signup</NavLink>
             </li>
         </ul>
       </div>

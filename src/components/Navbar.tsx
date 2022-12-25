@@ -1,6 +1,6 @@
 import styles from './Navbar.module.scss';
 
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
 
@@ -13,13 +13,13 @@ function Navbar() {
 
         <ul className={styles.mainMenu}>
             <li>
-              <Link to="/community">Community</Link>
+              <NavLink to="/community" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Community</NavLink>
             </li>
             <li>
-              <Link to="/messages">Messages</Link>
+              <NavLink to="/messages" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Messages</NavLink>
             </li>
             <li>
-              <Link to="/profile">Profile</Link>
+              <NavLink to="/profile" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Profile</NavLink>
             </li>
         </ul>
       </div>
