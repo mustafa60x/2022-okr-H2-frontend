@@ -8,8 +8,15 @@ function parseData(data) {
 
 function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
     return new Promise(async (resolve, reject) => {
+        const BASE_URL = import.meta.env.VITE_APP_API_URL2 + url
+
+        const headers = new Headers()
+        headers.append('Content-type', 'application/json')
+        // headers.append('Authorization', 'Bearer 1231232')
+
         const options = {
             method,
+            headers,
 
         } as any
     
@@ -17,7 +24,7 @@ function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
             options.body = type === 'JSON' ? JSON.stringify(data) : parseData(data)
         }
 
-        const response = await fetch(import.meta.env.VITE_APP_API_URL + url, options)
+        const response = await fetch(BASE_URL, options)
         const result = await response.json()
 
         if(response.ok) {
