@@ -4,7 +4,7 @@ import NavbarNoAuth from "../components/NavbarNoAuth";
 import { useAuth } from "../context";
 
 const Login = () => {
-  const { user, dispatch } = useAuth()
+  const { user, dispatch } = useAuth() as any
 
   const [name, setName] = useState("mustafa");
 

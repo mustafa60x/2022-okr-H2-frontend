@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer } from "react";
 
 import { authReducer } from "../reducer"
 
-const Context = createContext();
+const Context = createContext(null);
 
 const Provider = ({ children }) => {
   const userLocal = localStorage.getItem('user')
