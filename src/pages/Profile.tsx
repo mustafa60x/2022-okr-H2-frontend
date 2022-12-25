@@ -2,7 +2,7 @@ import SwitchTheme from "../components/SwitchTheme";
 import { useAuth } from "../context";
 
 const Profile = () => {
-  const { user, dispatch } = useAuth() as any
+  const { isAuth, dispatch } = useAuth() as any
 
   const logout = () => {
     dispatch({
@@ -17,7 +17,7 @@ const Profile = () => {
       <SwitchTheme></SwitchTheme>
 
       <div className="mt-6">
-        {user ? <button className="p-3 bg-slate-600 text-white" onClick={logout}>Çıkış Yap</button> : null}
+        {isAuth ? <button className="p-3 bg-slate-600 text-white" onClick={logout}>Çıkış Yap</button> : null}
       </div>
     </div>
   )

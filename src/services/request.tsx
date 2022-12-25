@@ -6,13 +6,17 @@ function parseData(data) {
     return formData
 }
 
+
 function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
     return new Promise(async (resolve, reject) => {
         const BASE_URL = import.meta.env.VITE_APP_API_URL2 + url
 
+        // const token = window["accessToken"] ? window["accessToken"] : 'dummy_token'
+        const token = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : 'dummy_token'
+
         const headers = new Headers()
         headers.append('Content-type', 'application/json')
-        // headers.append('Authorization', 'Bearer 1231232')
+        headers.append('Authorization', 'Bearer ' + token)
 
         const options = {
             method,

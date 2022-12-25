@@ -5,10 +5,12 @@ import { authReducer } from "../reducer"
 const Context = createContext(null);
 
 const Provider = ({ children }) => {
-  const userLocal = localStorage.getItem('user')
+  // const userLocal = localStorage.getItem('user')
+  const isAuthLocal = localStorage.getItem('isAuth')
 
   const [state, dispatch] = useReducer(authReducer, {
-    user: userLocal ? JSON.parse(userLocal) : false,
+    // user: userLocal ? JSON.parse(userLocal) : false,
+    isAuth: isAuthLocal ? JSON.parse(isAuthLocal) : false,
   });
 
   const data = {

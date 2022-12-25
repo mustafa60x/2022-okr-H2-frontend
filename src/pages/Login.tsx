@@ -13,7 +13,7 @@ const Login = () => {
 
   const login = async () => {
 
-    const response = await AuthService.login({ username: 'ali', password: '123'})
+    const response = await AuthService.login({ username: 'ali', password: '123'}) as any
     /* const newUser = {
       name: 'Mustafa',
       id: 1
@@ -21,7 +21,7 @@ const Login = () => {
 
     dispatch({
       type: 'LOGIN',
-      payload: response
+      payload: response.accessToken
     })
   }
 

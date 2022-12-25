@@ -6,31 +6,31 @@ import Messages from "../pages/Messages";
 import NoPage from "../pages/NoPage";
 import NoPageNoAuth from "../pages/NoPageNoAuth";
 import Profile from "../pages/Profile";
-import UserDetail from "../pages/UserDetail";
+import ProfileDetail from "../pages/ProfileDetail";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 
 import { useAuth } from "../context";
 
 function PageRouters() {
-  const { user } = useAuth() as any
+  const { isAuth } = useAuth() as any
 
   return (
     <div>
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<Layout />}>
-                <Route index element={user ? <Community /> : (<Navigate to="/login"/>)} />
-                <Route path="community" element={user ? <Community /> : (<Navigate to="/login"/>)} />
-                <Route path="messages" element={user ? <Messages /> : (<Navigate to="/login"/>)} />
-                <Route path="profile" element={user ? <Profile /> : (<Navigate to="/login"/>)} />
-                <Route path="user-detail/:user_id" element={user ? <UserDetail /> : (<Navigate to="/login"/>)} />
+                <Route index element={isAuth ? <Community /> : (<Navigate to="/login"/>)} />
+                <Route path="community" element={isAuth ? <Community /> : (<Navigate to="/login"/>)} />
+                <Route path="messages" element={isAuth ? <Messages /> : (<Navigate to="/login"/>)} />
+                <Route path="profile" element={isAuth ? <Profile /> : (<Navigate to="/login"/>)} />
+                <Route path="profile/:id" element={isAuth ? <ProfileDetail /> : (<Navigate to="/login"/>)} />
             </Route>
             
-            <Route path="login" element={user ? (<Navigate to="/community"/>) : <Login />} />
-            <Route path="signup" element={user ? (<Navigate to="/community"/>) : <Signup />} />
+            <Route path="login" element={isAuth ? (<Navigate to="/community"/>) : <Login />} />
+            <Route path="signup" element={isAuth ? (<Navigate to="/community"/>) : <Signup />} />
             
-            <Route path="*" element={user ? (<NoPage />) : <NoPageNoAuth />} />
+            <Route path="*" element={isAuth ? (<NoPage />) : <NoPageNoAuth />} />
         </Routes>
     </BrowserRouter>
     </div>
