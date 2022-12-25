@@ -4,9 +4,7 @@ import NavbarNoAuth from "../components/NavbarNoAuth";
 import { useAuth } from "../context";
 
 const Login = () => {
-  const { setUser } = useAuth()
-
-
+  const { user, dispatch } = useAuth()
 
   const [name, setName] = useState("mustafa");
 
@@ -16,8 +14,11 @@ const Login = () => {
       name: 'Mustafa',
       id: 1
     }
-    localStorage.setItem("user", JSON.stringify(newUser))
-    setUser(newUser)
+
+    dispatch({
+      type: 'LOGIN',
+      payload: newUser
+    })
   }
 
   return (

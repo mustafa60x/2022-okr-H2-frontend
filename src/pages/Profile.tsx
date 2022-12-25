@@ -2,10 +2,12 @@ import SwitchTheme from "../components/SwitchTheme";
 import { useAuth } from "../context";
 
 const Profile = () => {
-  const { user, setUser } = useAuth()
+  const { user, dispatch } = useAuth() as any
 
   const logout = () => {
-    setUser(false)
+    dispatch({
+      type: 'LOGOUT'
+    })
   }
 
   return (

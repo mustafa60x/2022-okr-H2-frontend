@@ -1,15 +1,17 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useReducer } from "react";
 
-const Context = createContext();
+import { siteReducer } from "../reducer"
+
+const Context = createContext(null);
 
 const Provider = ({ children }) => {
-  const initTheme = localStorage.getItem("theme") || 'light'
-
-  const [theme, setTheme] = useState(initTheme);
+  const [state, dispatch] = useReducer<any>(siteReducer, {
+    theme: localStorage.getItem('theme') || 'light',
+  })
 
   const data = {
-    theme,
-    setTheme,
+    ...state as any,
+    dispatch
   };
 
   return <Context.Provider value={data}>{children}</Context.Provider>;

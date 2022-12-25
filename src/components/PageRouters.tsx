@@ -12,23 +12,23 @@ import Signup from "../pages/Signup";
 import { useAuth } from "../context";
 
 function PageRouters() {
-  const { user: isAuth } = useAuth()
+  const { user } = useAuth() as any
 
   return (
     <div>
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<Layout />}>
-                <Route index element={isAuth ? <Community /> : (<Navigate to="/login"/>)} />
-                <Route path="community" element={isAuth ? <Community /> : (<Navigate to="/login"/>)} />
-                <Route path="messages" element={isAuth ? <Messages /> : (<Navigate to="/login"/>)} />
-                <Route path="profile" element={isAuth ? <Profile /> : (<Navigate to="/login"/>)} />
+                <Route index element={user ? <Community /> : (<Navigate to="/login"/>)} />
+                <Route path="community" element={user ? <Community /> : (<Navigate to="/login"/>)} />
+                <Route path="messages" element={user ? <Messages /> : (<Navigate to="/login"/>)} />
+                <Route path="profile" element={user ? <Profile /> : (<Navigate to="/login"/>)} />
             </Route>
             
-            <Route path="login" element={isAuth ? (<Navigate to="/community"/>) : <Login />} />
-            <Route path="signup" element={isAuth ? (<Navigate to="/community"/>) : <Signup />} />
+            <Route path="login" element={user ? (<Navigate to="/community"/>) : <Login />} />
+            <Route path="signup" element={user ? (<Navigate to="/community"/>) : <Signup />} />
             
-            <Route path="*" element={isAuth ? (<NoPage />) : <NoPageNoAuth />} />
+            <Route path="*" element={user ? (<NoPage />) : <NoPageNoAuth />} />
         </Routes>
     </BrowserRouter>
     </div>

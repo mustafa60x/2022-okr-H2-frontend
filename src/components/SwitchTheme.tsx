@@ -1,19 +1,18 @@
 import { useSite } from "../context";
 
 function SwitchTheme() {
-  const { theme, setTheme } = useSite();
+  const { theme, dispatch } = useSite();
 
-  const changeTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light"
-    localStorage.setItem("theme", newTheme)
-
-    setTheme(newTheme)
+  const switchTheme = () => {
+    dispatch({
+      type: 'TOGGLE_THEME',
+    })
   }
 
   return (
     <div>
       Mevcut tema = {theme} <br />
-      <button className="bg-gray-300 p-3 font-semibold text-green-900" onClick={() => changeTheme()}>
+      <button className="bg-gray-300 p-3 font-semibold text-green-900" onClick={switchTheme}>
         Tema Değiştir
       </button>
     </div>
