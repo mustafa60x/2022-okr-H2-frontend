@@ -1,4 +1,4 @@
-import isEmpty from "lodash/isEmpty"
+import { isEmpty } from "../utils/İndex"
 
 function parseData(data) {
     const formData = new FormData()

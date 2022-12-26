@@ -1,8 +1,8 @@
-function PageTitle({ title, bgColor = "#ebebeb", color = "#000" }) {
+function PageTitle({ title, bgColor = "#000", color = "#000" }) {
 
   return (
-    <div className="my-2">
-      <span className="py-1 px-2 rounded-lg" style={{ backgroundColor: bgColor, color: color }}>{title}</span>
+    <div className="my-2 pageTitle">
+      <span className="py-1 px-2 rounded-lg shadow-lg font-semibold" style={{ backgroundColor: bgColor, color: color }}>{title}</span>
     </div>
   )
 }

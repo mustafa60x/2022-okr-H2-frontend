@@ -1,7 +1,7 @@
 import { createContext, useContext, useReducer } from "react";
-import isEmpty from "lodash/isEmpty"
 
 import { authReducer } from "../reducer"
+import { isEmpty } from "../utils/İndex";
 
 const Context = createContext(null);
 
@@ -10,7 +10,7 @@ const Provider = ({ children }) => {
   const isAuthLocal = localStorage.getItem('isAuth')
 
   const [state, dispatch] = useReducer(authReducer, {
-    user: !isEmpty(userLocal) ? JSON.parse(userLocal) : '',
+    user: !isEmpty(userLocal) ? JSON.parse(userLocal) : false,
     isAuth: !isEmpty(isAuthLocal) ? JSON.parse(isAuthLocal) : false,
   });
 

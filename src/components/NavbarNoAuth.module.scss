@@ -15,7 +15,7 @@
       cursor: pointer;
       float: left;
       display: block;
-      color: $blue-dark;
+      color: $navbar-link-color;
       text-align: center;
       padding: 14px 16px;
       text-decoration: none;
@@ -24,7 +24,7 @@
       transition: all 300ms;
       &:hover {
         background: #eee;
-        color: #6eb0ee;
+        color: $navbar-link-hover-color;
         text-decoration: underline;
         border-radius: 20px;
       }

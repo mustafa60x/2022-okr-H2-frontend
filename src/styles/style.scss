@@ -28,9 +28,12 @@ a:hover {
   background: $background-color;
   min-height: $h-full;
   height: 100%;
-  text-align: center;
   display: flex;
   justify-content: center;
+
+  .pageTitle {
+    text-align: center;
+  }
 }
 
 @media screen and (max-width: 600px) {

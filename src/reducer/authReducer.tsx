@@ -17,7 +17,7 @@ function reducer(state: any, action: any) {
 
       return {
         ...state,
-        user: '',
+        user: false,
         isAuth: false,
       };
 
