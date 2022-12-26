@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { UserService } from "../services";
 
+import { Helmet } from "react-helmet"
+import PageTitle from "../components/PageTitle";
+
 const ProfileDetail = () => {
   const { id } = useParams()
-  console.log(id)
 
   const [user, setUser] = useState() as any;
 
@@ -14,7 +16,10 @@ const ProfileDetail = () => {
 
   return (
     <div>
-      <h1>Profile Detail</h1>
+      <Helmet>
+          <title>{user?._id}</title>
+      </Helmet>
+      <PageTitle title="Profile Detail" bgColor="#e0e0e0"></PageTitle>
 
 
       <div className="bg-gray-300 my-4 p-3 flex flex-col items-start">

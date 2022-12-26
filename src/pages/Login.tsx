@@ -3,11 +3,12 @@ import { useAuth } from "../context";
 
 import {AuthService} from "../services";
 
+import { Helmet } from "react-helmet"
+
 const Login = () => {
   const { user, dispatch } = useAuth() as any
 
   const [name, setName] = useState("mustafa");
-
 
   const login = async () => {
 
@@ -19,12 +20,16 @@ const Login = () => {
 
     dispatch({
       type: 'LOGIN',
-      payload: response.accessToken
+      payload: response
     })
   }
 
   return (
     <>
+      <Helmet>
+          <title>Login</title>
+      </Helmet>
+
       <h1>Login Page</h1>
 
       <div>

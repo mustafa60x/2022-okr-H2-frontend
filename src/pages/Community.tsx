@@ -3,6 +3,9 @@ import Modal from "../components/UI/Modal";
 
 import {PostService, UserService} from "../services";
 
+import { Helmet } from "react-helmet"
+import PageTitle from "../components/PageTitle";
+
 const Community = (props) => {
   const [modalIsShown, setModalIsShown] = useState(false);
   const [users, setUsers] = useState([]);
@@ -38,7 +41,12 @@ const Community = (props) => {
 
   return (
     <div>
-      <h1>Community</h1>
+      <Helmet>
+        <title>Community</title>
+        {/* <meta name="description" content="community description"/> */}
+      </Helmet>
+
+      <PageTitle title="Community" bgColor="#e0e0e0"></PageTitle>
       <div className="bg-gray-400 py-4 my-4">
         <p>{process.env.NODE_ENV}</p>
         <p>{import.meta.env.VITE_APP_API_URL}</p>

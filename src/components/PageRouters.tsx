@@ -29,6 +29,7 @@ function PageRouters() {
             </Route>
             
             <Route path="/auth" element={isAuth ? (<Navigate to="/community"/>) : <AuthLayout />}>
+              <Route index element={isAuth ? (<Navigate to="/community"/>) : <Login />} />
               <Route path="login" element={isAuth ? (<Navigate to="/community"/>) : <Login />} />
               <Route path="signup" element={isAuth ? (<Navigate to="/community"/>) : <Signup />} />
             </Route>
