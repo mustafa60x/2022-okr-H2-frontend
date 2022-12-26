@@ -12,6 +12,7 @@ import Checkbox from "../components/UI/Checkbox";
 import Textarea from "../components/UI/Textarea";
 import Select from "../components/UI/Select";
 import Radio from "../components/UI/Radio";
+import classNames from "classnames";
 
 const Signup = () => {
   const { user, dispatch } = useAuth() as any
@@ -35,10 +36,10 @@ const Signup = () => {
   return (
     <>
       <Helmet>
-          <title>Login</title>
+          <title>Kayıt</title>
       </Helmet>
 
-      <PageTitle title="Signup" bgColor="#ccccff"></PageTitle>
+      <PageTitle title="Kayıt" bgColor="#ccccff"></PageTitle>
 
       <div>
         <Formik initialValues={{
@@ -94,7 +95,11 @@ const Signup = () => {
               <Checkbox label="Kuralları kabul ediyorum!" name="accept"></Checkbox>
 
               <div className="mt-6">
-                <button className="p-3 bg-slate-600 text-white" type="submit">Giriş Yap</button>
+                <button disabled={!values.accept} className={classNames({
+                  "p-3 text-white": true,
+                  "bg-slate-600": values.accept,
+                  "bg-slate-300": !values.accept,
+                })} type="submit">Kayıt Ol</button>
               </div>
             </Form>
           )}
