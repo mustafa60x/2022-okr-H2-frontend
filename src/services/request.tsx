@@ -53,6 +53,7 @@ function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
             }
         } catch (error: any) {
             showErrorMessage(error)
+            reject(error)
         }
     })
 }

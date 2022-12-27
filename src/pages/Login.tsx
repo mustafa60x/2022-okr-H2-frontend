@@ -46,24 +46,28 @@ const Login = () => {
           level: 'sr'
         }} onSubmit={(values, { setSubmitting, resetForm }) => {
           async function sendAsyncRequest() {
-            // Giriş butonunun pasifliğini açar
-            // NOTE: isSubmitting async fonksiyonlarda sıkıntı yapabiliyor.
-            const response = await AuthService.login({ username: values.username, password: values.password }) as any
+            try {
+              // Giriş butonunun pasifliğini açar
+              // NOTE: isSubmitting async fonksiyonlarda sıkıntı yapabiliyor.
+              const response = await AuthService.login({ username: values.username, password: values.password }) as any
 
-            setSubmitting(false)
-            resetForm()
+              setSubmitting(false)
+              resetForm()
 
-            dispatch({
-              type: 'LOGIN',
-              payload: response
-            })
+              dispatch({
+                type: 'LOGIN',
+                payload: response
+              })
+            } catch (error) {
+              setSubmitting(false)
+            }
           }
           sendAsyncRequest();
         }} validationSchema={LoginSchema}>
           {({ values, isSubmitting }) => (
             <Form className="p-6 m-4 shadow-lg grid gap-y-4 border rounded">
-              <Input name="username" label="Username"></Input>
-              <Input name="password" label="Password" type="password"></Input>
+              <Input name="username" label="Kullanıcı adı"></Input>
+              <Input name="password" label="Parola" type="password"></Input>
 
               <button type="reset">Formu Resetle</button>
               <button

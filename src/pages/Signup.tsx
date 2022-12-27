@@ -51,12 +51,16 @@ const Signup = () => {
           }}
           onSubmit={(values, {setSubmitting, resetForm}) => {
             async function sendAsyncRequest() {
-              // Giriş butonunun pasifliğini açar
-              // NOTE: isSubmitting async fonksiyonlarda sıkıntı yapabiliyor.
-              const response = (await AuthService.signup({ ...values })) as any;
-              setSubmitting(false)
-              resetForm()
-              alert("Kayıt başarılı!");
+              try {
+                // Giriş butonunun pasifliğini açar
+                // NOTE: isSubmitting async fonksiyonlarda sıkıntı yapabiliyor.
+                const response = (await AuthService.signup({ ...values })) as any;
+                setSubmitting(false)
+                resetForm()
+                alert("Kayıt başarılı!");
+              } catch (error) {
+                setSubmitting(false)
+              }
             }
             sendAsyncRequest();
             
@@ -70,8 +74,8 @@ const Signup = () => {
         >
           {({ values, isSubmitting }) => (
             <Form className="p-6 m-4 shadow-lg grid gap-y-4 border rounded">
-              <Input name="username" label="Username"></Input>
-              <Input name="password" label="Password" type="password"></Input>
+              <Input name="username" label="Kullanıcı adı"></Input>
+              <Input name="password" label="Parola" type="password"></Input>
 
               <Select
                 label="Cinsiyet"
@@ -92,15 +96,17 @@ const Signup = () => {
                 ]}
               ></Radio>
 
-              <Field component="select" name="tags" multiple={true}>
-                <option value="Seyahat">Seyahat</option>
-                <option value="Kitap">Kitap</option>
-                <option value="Müzik">Müzik</option>
-                <option value="Spor">Spor</option>
-                <option value="Resim">Resim</option>
-              </Field>
+              <div>
+                <div className="text-sm text-gray-600 block mb-1.5">Kategori Seçin</div>
+                <Field component="select" name="tags" multiple={true}>
+                  <option value="Kitap">Kitap</option>
+                  <option value="Müzik">Müzik</option>
+                  <option value="Spor">Spor</option>
+                  <option value="Resim">Resim</option>
+                </Field>
+              </div>
 
-              <Textarea label="Hakkımda" rows={4} name="about"></Textarea>
+              <Textarea label="Hakkımda" rows={3} name="about"></Textarea>
 
               {/* <Field type="file" name="avatar"></Field> */}
 
