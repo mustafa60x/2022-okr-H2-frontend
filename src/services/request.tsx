@@ -22,7 +22,7 @@ function showErrorMessage(error) {
 function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
     return new Promise(async (resolve, reject) => {
         try {
-            const BASE_URL = import.meta.env.VITE_APP_API_URL2 + url
+            const BASE_URL = import.meta.env.VITE_APP_API_URL + url
 
             // const token = window["accessToken"] ? window["accessToken"] : 'dummy_token'
             const token = !isEmpty(localStorage.getItem('accessToken')) ? JSON.parse(localStorage.getItem('accessToken')) : 'dummy_token'

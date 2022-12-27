@@ -3,7 +3,7 @@ npm create vite@latest my-react-app -- --template react-ts
 
 npm create vite@latest ./ -- --template react-ts
 
-## Bottstrap
+## Botstrap
 npm install react-bootstrap bootstrap
 
 ## React Router
@@ -13,3 +13,17 @@ npm i react-router-dom
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 
+## Formik
+npm i formik
+
+## Yup
+npm i yup
+
+## Zustand
+npm install zustand
+
+## React Icons
+npm i react-icons
+
+## Helmet
+npm i react-helmet
