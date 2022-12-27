@@ -44,7 +44,7 @@ const Signup = () => {
             password: "",
             about: "",
             gender: 1,
-            tags: ["html", "css"],
+            // tags: ["html", "css"],
             avatar: "",
             accept: false,
             level: "sr",
@@ -96,15 +96,15 @@ const Signup = () => {
                 ]}
               ></Radio>
 
-              <div>
+              {/* <div>
                 <div className="text-sm text-gray-600 block mb-1.5">Kategori Seçin</div>
                 <Field component="select" name="tags" multiple={true}>
-                  <option value="Kitap">Kitap</option>
-                  <option value="Müzik">Müzik</option>
-                  <option value="Spor">Spor</option>
-                  <option value="Resim">Resim</option>
+                  <option value="html">Kitap</option>
+                  <option value="css">Müzik</option>
+                  <option value="java">Spor</option>
+                  <option value="react">Resim</option>
                 </Field>
-              </div>
+              </div> */}
 
               <Textarea label="Hakkımda" rows={3} name="about"></Textarea>
 

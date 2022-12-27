@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useSite } from "../context";
 
 function SwitchTheme() {
@@ -11,9 +12,12 @@ function SwitchTheme() {
 
   return (
     <div>
-      Mevcut tema = {theme} <br />
-      <button className="bg-gray-300 p-3 font-semibold text-green-900" onClick={switchTheme}>
-        Tema Değiştir
+      <button className={classNames({
+        "mt-10 mb-5 p-3 font-semibold text-white w-full block": true,
+        "bg-blue-400": theme === 'light',
+        "bg-black": theme === 'dark',
+      })} onClick={switchTheme}>
+        Tema Değiştir ({theme})
       </button>
     </div>
   );

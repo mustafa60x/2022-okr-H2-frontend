@@ -4,7 +4,6 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Prosto+One&display=swap");
 
-$background-color: #eee;
 
 * {
   font-family: "Prosto One", serif;
@@ -25,7 +24,7 @@ a:hover {
 
 .main {
   margin-top: 60px;
-  background: $background-color;
+  // background: $background-color;
   min-height: $h-full;
   height: 100%;
   display: flex;

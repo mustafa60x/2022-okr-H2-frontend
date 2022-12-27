@@ -38,8 +38,6 @@ const Login = () => {
       </Helmet>
 
       <PageTitle title="Giriş" bgColor="#ccccff"></PageTitle>
-      {counter}
-      <button onClick={() => increaseCounter()}>Increase</button>
 
       <div>
         <Formik initialValues={{
