@@ -12,6 +12,8 @@ const useStore = create((set: any, get: any) => ({
     addSuccess: (success) => set(state => ({ successes: [...state.successes, success] })),
     removeSuccess: (success) => set(state => ({ successes: [...state.successes.filter((item: any) => item.id !== success.id)] })),
     destroyAllSuccesses: () => set(state => ({ successes: [] })),
+    isLoading: true,
+    setLoading: (status) => set(state => ({ isLoading: status })),
 }))
 
 export default useStore;

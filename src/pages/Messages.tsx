@@ -16,10 +16,10 @@ const Messages = () => {
   return (
     <>
       <Helmet>
-        <title>Messages</title>
+        <title>Mesajlar</title>
       </Helmet>
 
-      <PageTitle title="Messages" bgColor="#86efac" color="#584b85"></PageTitle>
+      <PageTitle title="Mesajlar" bgColor="#86efac" color="#584b85"></PageTitle>
       {selectedUserId}
 
       <div id="chatBox" className="bg-gray-200 w-full h-3/4 rounded-lg">

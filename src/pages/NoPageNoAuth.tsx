@@ -12,7 +12,7 @@ const NoPageNoAuth = () => {
           <div className="flex flex-col justify-center items-center">
             <span className="text-6xl">404</span>
 
-            <p>Page not found! (No Auth)</p>
+            <p>Sayfa bulunamadı! (Oturum açmadınız)</p>
 
           </div>
         </Container>

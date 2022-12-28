@@ -17,6 +17,7 @@ import classNames from "classnames";
 import { FiCheck } from "react-icons/fi";
 
 import useUserStore from "../store/user";
+import useSiteStore from "../store/site";
 
 const Community = (props) => {
   const levels = [
@@ -32,6 +33,7 @@ const Community = (props) => {
   const [search, setSearch] = useState("");
 
   const { user }: { user: any } = useUserStore((state) => state);
+  const { setLoading } = useSiteStore((state) => state);
 
   const selectLevel = (selectedLevel) => {
     // Yoksa ekle, varsa çıkar
@@ -67,8 +69,14 @@ const Community = (props) => {
 
   useEffect(() => {
     const identifier = setTimeout(() => {
+      
+      setLoading(true)
+      useSiteStore.setState(state => ({ isLoading: true }))
       UserService.searchUsers({ search, levels: selectedLevels, gender }).then(
-        (data: any) => setUsers(data)
+        (data: any) => {
+          setUsers(data)
+          setLoading(false)
+        }
       );
     }, 500);
 
@@ -85,12 +93,12 @@ const Community = (props) => {
   return (
     <div>
       <Helmet>
-        <title>Community</title>
+        <title>Topluluk</title>
         {/* <meta name="description" content="community description"/> */}
       </Helmet>
 
       <PageTitle
-        title="Community"
+        title="Topluluk"
         bgColor="#ffe34c "
         color="#584b85"
       ></PageTitle>
@@ -108,7 +116,7 @@ const Community = (props) => {
             defaultValue={0}
           >
             {[
-              { key: 0, value: "Hepsi" },
+              { key: 0, value: "Hepsini Seç" },
               { key: 1, value: "Kadın" },
               { key: 2, value: "Erkek" },
             ].map((option: any, key: any) => (
@@ -146,7 +154,7 @@ const Community = (props) => {
 
         <label className="block w-96">
           <input
-            placeholder="Search username..."
+            placeholder="Kullanıcı adı ara.."
             className={classNames({
               "w-full h-10 border-b outline-none focus:border-black p-3 rounded":
                 true,
@@ -173,7 +181,7 @@ const Community = (props) => {
                     />
                     <span className="ml-2 mr-3">
                       {userItem.username}{" "}
-                      <span className="text-xs bg-red-100 px-1">
+                      <span className="text-xs bg-red-100 px-1 rounded">
                         {userItem.level}
                       </span>
                     </span>

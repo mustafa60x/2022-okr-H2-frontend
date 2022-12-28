@@ -13,7 +13,7 @@ const NoPage = () => {
           <div className="flex flex-col justify-center items-center">
             <span className="text-6xl">404</span>
 
-            <p>Page not found!</p>
+            <p>Sayfa bulunamadı!</p>
 
           </div>
         </Container>

@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 
 import Container from "../components/Container";
 import ErrorMessagePopup from "../components/ErrorMessagePopup";
+import Loading from "../components/Loading";
 import Navbar from "../components/Navbar";
 import SuccessMessagePopup from "../components/SuccessMessagePopup";
 import { useAuth, useSite } from "../context";
@@ -35,6 +36,7 @@ const Layout = () => {
         "bg-gray-100": theme === "light",
       })}>
         <Container>
+          <Loading></Loading>
           <SuccessMessagePopup></SuccessMessagePopup>
           <ErrorMessagePopup></ErrorMessagePopup>
 

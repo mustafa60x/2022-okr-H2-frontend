@@ -28,10 +28,10 @@ const Profile = () => {
   return (
     <div>
       <Helmet>
-        <title>Profile</title>
+        <title>Profil</title>
       </Helmet>
 
-      <PageTitle title="Profile" bgColor="#89b3f6" color="#584b85"></PageTitle>
+      <PageTitle title="Profil" bgColor="#89b3f6" color="#584b85"></PageTitle>
 
 
       { userInfo && 

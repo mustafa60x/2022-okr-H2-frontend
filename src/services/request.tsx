@@ -43,11 +43,14 @@ function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
                 options.body = type === 'JSON' ? JSON.stringify(data) : parseData(data)
             }
 
+            useSiteStore.setState(state => ({ isLoading: true }))
+
             const response = await fetch(BASE_URL, options)
             const result = await response.json()
 
+            useSiteStore.setState(state => ({ isLoading: false }))
+
             if(response.ok) {
-                
                 resolve(result)
             } else {
                 await useSiteStore.setState(state => ({ errors: [...state.errors, {id: uuidv4(), message: getErrorMessage(result)}] }))

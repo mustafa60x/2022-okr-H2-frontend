@@ -23,7 +23,8 @@ const ProfileDetail = () => {
       <Helmet>
           <title>{user?._id}</title>
       </Helmet>
-      <PageTitle title="Profile Detail" bgColor="#e0e0e0"></PageTitle>
+
+      <PageTitle title="Profil Detayı" bgColor="#e0e0e0"></PageTitle>
 
 
       { user && 
