@@ -8,7 +8,7 @@ const Messages = () => {
           <title>Messages</title>
       </Helmet>
 
-      <PageTitle title="Messages" bgColor="#b5dc5f" color="#191500"></PageTitle>
+      <PageTitle title="Messages" bgColor="#b5dc5f" color="#584b85"></PageTitle>
     </>
   );
 };

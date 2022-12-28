@@ -31,9 +31,7 @@ const Profile = () => {
         <title>Profile</title>
       </Helmet>
 
-      <PageTitle title="Profile" bgColor="#89b3f6" color="#191500"></PageTitle>
-
-      <SwitchTheme></SwitchTheme>
+      <PageTitle title="Profile" bgColor="#89b3f6" color="#584b85"></PageTitle>
 
 
       { userInfo && 
@@ -66,6 +64,9 @@ const Profile = () => {
         </div>
         <div className="text-gray-500 p-2 italic">{userInfo.about}</div>
       </div>}
+
+      
+      <SwitchTheme></SwitchTheme>
 
       <div className="mt-6">
         {isAuth ? (

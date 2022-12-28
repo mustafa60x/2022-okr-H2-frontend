@@ -7,9 +7,10 @@ const NoPage = () => {
       <div>
         <Navbar></Navbar>
       </div>
+
       <div className="main">
         <Container>
-          <div>
+          <div className="flex flex-col justify-center items-center">
             <span className="text-6xl">404</span>
 
             <p>Page not found!</p>

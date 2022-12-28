@@ -15,13 +15,13 @@ function Navbar() {
 
         <ul className={styles.mainMenu}>
             <li>
-              <NavLink to="/community" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Community</NavLink>
+              <NavLink to="/community" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Topluluk</NavLink>
             </li>
             <li>
-              <NavLink to="/messages" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Messages</NavLink>
+              <NavLink to="/messages" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Mesajlar</NavLink>
             </li>
             <li>
-              <NavLink to="/profile" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Profile</NavLink>
+              <NavLink to="/profile" className={({ isActive }) => isActive ? styles.activeNavbarLink : null}>Profil</NavLink>
             </li>
         </ul>
       </div>

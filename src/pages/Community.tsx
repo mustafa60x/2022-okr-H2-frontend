@@ -12,7 +12,7 @@ import woman from "../assets/woman.png";
 import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
 import { BsFillChatLeftTextFill } from "react-icons/bs";
 
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { FiCheck } from "react-icons/fi";
 
@@ -24,7 +24,7 @@ const Community = (props) => {
     { key: "sr", value: "Sr. Developer" },
     { key: "ninja", value: "Ninja" },
   ];
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const [modalIsShown, setModalIsShown] = useState(false);
   const [users, setUsers] = useState([]);
   const [gender, setGender] = useState(0);
@@ -52,8 +52,6 @@ const Community = (props) => {
     setGender(e.target.value);
   };
 
-  let timeout = 0;
-
   const sendMessage = (user) => {
     setTimeout(() => {
       // TODO message yaz ve sonra messages sayfasına git
@@ -62,6 +60,10 @@ const Community = (props) => {
       // navigate("/messages");
     }, 5000);
   };
+
+  const openProfileDetail = (user) => {
+    navigate(`/profile/${user._id}`);
+  }
 
   useEffect(() => {
     const identifier = setTimeout(() => {
@@ -90,7 +92,7 @@ const Community = (props) => {
       <PageTitle
         title="Community"
         bgColor="#ffe34c "
-        color="#191500"
+        color="#584b85"
       ></PageTitle>
 
       {/* <div className="bg-gray-400 py-4 my-4">
@@ -163,15 +165,17 @@ const Community = (props) => {
                 className="border-[#584b85] border p-2 h-20 my-2 flex justify-between items-center rounded-lg"
               >
                 <div className="flex justify-start items-center">
-                  <img
-                    src={userItem.gender === 1 ? woman : man}
-                    className="h-10 w-10"
-                    alt="profile"
-                  />
-                  <span className="ml-2 mr-3">
-                    {userItem.username}{" "}
-                    <span className="text-xs bg-red-100 px-1">
-                      {userItem.level}
+                  <span onClick={() => openProfileDetail(userItem)} className="flex justify-start items-center cursor-pointer">
+                    <img
+                      src={userItem.gender === 1 ? woman : man}
+                      className="h-10 w-10"
+                      alt="profile"
+                    />
+                    <span className="ml-2 mr-3">
+                      {userItem.username}{" "}
+                      <span className="text-xs bg-red-100 px-1">
+                        {userItem.level}
+                      </span>
                     </span>
                   </span>
                   <span className="ml-1 mr-5">
