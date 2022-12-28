@@ -18,6 +18,7 @@ import { FiCheck } from "react-icons/fi";
 
 import useUserStore from "../store/user";
 import useSiteStore from "../store/site";
+import useMessageStore from "../store/message"
 
 const Community = (props) => {
   const levels = [
@@ -32,8 +33,10 @@ const Community = (props) => {
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [search, setSearch] = useState("");
 
+  // Stores
   const { user }: { user: any } = useUserStore((state) => state);
   const { setLoading } = useSiteStore((state) => state);
+  const { messages, setAllMessages, selectedUser, setSelectedUser, addMessage, destroyAllMessages, addUser } = useMessageStore(state => state)
 
   const selectLevel = (selectedLevel) => {
     // Yoksa ekle, varsa çıkar
@@ -55,12 +58,12 @@ const Community = (props) => {
   };
 
   const sendMessage = (user) => {
-    setTimeout(() => {
-      // TODO message yaz ve sonra messages sayfasına git
+    // TODO message yaz ve sonra messages sayfasına git
       // TODO seçilenin id'sini storeda tut ve message sayfasında tekrar kullan
       console.log(user);
-      // navigate("/messages");
-    }, 5000);
+      setSelectedUser({...user})
+      addUser(user)
+      navigate("/messages");
   };
 
   const openProfileDetail = (user) => {
@@ -209,7 +212,7 @@ const Community = (props) => {
                 <div>
                   {user._id !== userItem._id && (
                     <BsFillChatLeftTextFill
-                      onClick={() => sendMessage(user)}
+                      onClick={() => sendMessage(userItem)}
                       className="h-7 w-7 cursor-pointer text-green-500"
                     ></BsFillChatLeftTextFill>
                   )}

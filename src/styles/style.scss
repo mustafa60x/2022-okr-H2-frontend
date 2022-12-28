@@ -35,6 +35,13 @@ a:hover {
   }
 }
 
+.truncate {
+  width: 350px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media screen and (max-width: 600px) {
   .hiddenMobile {
     visibility: hidden;
