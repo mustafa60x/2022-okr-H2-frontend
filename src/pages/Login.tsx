@@ -8,12 +8,8 @@ import PageTitle from "../components/PageTitle";
 import { LoginSchema } from "../validations/LoginSchema";
 import classNames from "classnames";
 
-import useSiteStore from "../store/site"
-
 const Login = () => {
   const { user, dispatch } = useAuth() as any
-
-  const { counter, increaseCounter } = useSiteStore(state => state)
 
   /* const { handleSubmit, handleChange, values } = useFormik({
     initialValues: {

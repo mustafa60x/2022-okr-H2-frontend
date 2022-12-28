@@ -1,7 +1,5 @@
 import { useField } from "formik"
 
-import { FiCheck } from "react-icons/fi"
-
 import classNames from "classnames"
 
 export default function Radio({ label, options, ...props }: any) {

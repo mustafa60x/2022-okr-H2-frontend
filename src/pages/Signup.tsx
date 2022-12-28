@@ -12,7 +12,12 @@ import classNames from "classnames";
 
 import { SignupSchema } from "../validations";
 
+import useSiteStore from "../store/site"
+import { v4 as uuidv4 } from 'uuid';
+
+
 const Signup = () => {
+  const { successes, addSuccess } = useSiteStore(state => state)
   /* const { handleSubmit, handleChange, values } = useFormik({
     initialValues: {
       username: '',
@@ -57,7 +62,7 @@ const Signup = () => {
                 const response = (await AuthService.signup({ ...values })) as any;
                 setSubmitting(false)
                 resetForm()
-                alert("Kayıt başarılı!");
+                addSuccess({id: uuidv4(), message: "Kayıt işlemi başarılı"})
               } catch (error) {
                 setSubmitting(false)
               }
