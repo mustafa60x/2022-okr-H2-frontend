@@ -12,16 +12,40 @@ import { UserService } from "../services";
 
 import useUserStore from "../store/user"
 
-const Layout = () => {
+
+const Layout = ({ socket }) => {
+  
   const { theme, dispatch } = useSite();
   
   const { user } = useAuth() as any;
   const { setUser } = useUserStore(state => state)
 
   useEffect(() => {
+    // Sockets
+    socket.on("hello", (msg) => {
+      alert(msg)
+    })
+    socket.on("connect", () => {
+      console.log('socket bağlandı... :)')
+    })
+    socket.on('disconnect', () => {
+      console.log('socket disconnect... :)')
+    });
+
+    socket.on('pong', () => {
+      console.log('socket pong... :)')
+    });
+
     UserService.getUserDetail(user._id).then((data: any) => {
       setUser({...data})
     });
+
+
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('pong');
+    };
   }, []);
 
   return (

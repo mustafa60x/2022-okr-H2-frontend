@@ -11,7 +11,7 @@ import useUserStore from "../store/user";
 import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 
-const Messages = () => {
+const Messages = ({ socket }) => {
   const {
     messages,
     setAllMessages,
@@ -58,6 +58,12 @@ const Messages = () => {
     const identifier = setTimeout(() => {
 
       if(inputMessage) {
+        socket.emit('message', {
+          text: 'selam',
+          name: localStorage.getItem('userName'),
+          id: `${socket.id}${Math.random()}`,
+          socketID: socket.id,
+        });
         addMessage({ownerId: user._id, text: inputMessage})
         // socket send message
         // mesaj socket'e gider ve orada database'e yazılır, sonra kullanıcılara mesaj gönderilir ve ekrana basılır

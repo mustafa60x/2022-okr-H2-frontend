@@ -14,6 +14,23 @@ import { useAuth } from "../context";
 import AuthLayout from "../pages/AuthLayout";
 import { isEmpty } from "../utils/İndex";
 
+import * as socketIO from 'socket.io-client';
+
+const socket = socketIO.connect(
+  process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : 'https://test.com',
+  {
+    // reconnect: true,
+    secure: true,
+    transports: ['websocket', 'xhr-polling'],
+    reconnectionDelay: 1000,
+    reconnectionAttempts: 1000,
+    query: {
+      accesstoken: 'Bearer 123213',
+      // refreshtoken: $cookies.get('refreshToken') || '',
+    },
+  }
+)
+
 function PageRouters() {
   const accessToken = !isEmpty(localStorage.getItem('accessToken')) ? JSON.parse(localStorage.getItem('accessToken')) : false
 
@@ -31,10 +48,10 @@ function PageRouters() {
     <div>
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Layout socket={socket} />}>
                 <Route index element={isLoggedIn ? <Community /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="community" element={isLoggedIn ? <Community /> : (<Navigate to="/auth/login"/>)} />
-                <Route path="messages" element={isLoggedIn ? <Messages /> : (<Navigate to="/auth/login"/>)} />
+                <Route path="messages" element={isLoggedIn ? <Messages socket={socket} /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="profile" element={isLoggedIn ? <Profile /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="profile/:id" element={isLoggedIn ? <ProfileDetail /> : (<Navigate to="/auth/login"/>)} />
             </Route>
