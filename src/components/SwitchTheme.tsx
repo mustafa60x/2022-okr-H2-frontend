@@ -17,7 +17,7 @@ function SwitchTheme() {
         "bg-blue-400": theme === 'light',
         "bg-black": theme === 'dark',
       })} onClick={switchTheme}>
-        Tema Değiştir ({theme})
+        Tema Değiştir ({theme === 'dark' ? 'Açık' : 'Koyu'})
       </button>
     </div>
   );

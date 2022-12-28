@@ -27,7 +27,7 @@ const ProfileDetail = () => {
 
 
       { user && 
-      <div className="border-[#584b85] border p-2 h-20 my-2 flex justify-between items-center rounded-lg">
+      <div className="border-slate-400 border p-2 h-20 my-2 flex justify-between items-center rounded-lg">
         <div className="flex justify-start items-center">
           <img
             src={user?.gender === 1 ? woman : man}
