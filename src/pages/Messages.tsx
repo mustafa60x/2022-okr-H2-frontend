@@ -5,17 +5,22 @@ import man from "../assets/man.png";
 import woman from "../assets/woman.png";
 import classNames from "classnames";
 
+import useMessageStore from "../store/message"
+
 const Messages = () => {
+  const { messages, setAllMessages, selectedUserId, setSelectedUserId, addMessage, destroyAllMessages } = useMessageStore(state => state)
   const selectUser = (key) => {
-    alert(key)
+    setSelectedUserId(key)
   }
+
   return (
     <>
       <Helmet>
         <title>Messages</title>
       </Helmet>
 
-      <PageTitle title="Messages" bgColor="#b5dc5f" color="#584b85"></PageTitle>
+      <PageTitle title="Messages" bgColor="#86efac" color="#584b85"></PageTitle>
+      {selectedUserId}
 
       <div id="chatBox" className="bg-gray-200 w-full h-3/4 rounded-lg">
         <div className="grid grid-cols-4 h-full">
@@ -35,7 +40,10 @@ const Messages = () => {
             
 
             {[...Array(10)].map((value, key) => (
-              <div className="flex items-center gap-4 p-4 border-b border-slate-300 cursor-pointer hover:bg-gray-200" key={key} onClick={() => selectUser(key)}>
+              <div className={classNames({
+                "flex items-center gap-4 p-4 border-b border-slate-300 cursor-pointer hover:bg-gray-200": true,
+                "bg-green-100": +selectedUserId === +key
+              })} key={key} onClick={() => selectUser(key)}>
                 <img src={man} className="h-10 w-10" alt="profile" />
                 <div className="flex flex-col">
                   <strong className="text-slate-900 text-sm font-medium dark:text-slate-200">
