@@ -69,7 +69,7 @@ const Profile = () => {
 
       <div className="mt-6">
         {isAuth ? (
-          <button className="bg-slate-600 h-10 p-2 text-white rounded" onClick={logout}>
+          <button className="bg-red-600 h-10 p-2 text-white text-sm font-semibold hover:bg-red-500 rounded block w-full" onClick={logout}>
             Çıkış Yap
           </button>
         ) : null}

@@ -21,6 +21,8 @@ export const isEmpty = (value) => {
         return true
     } else if (!value) {
         return true
+    } else if (value && value.length === 0) {
+        return true
     } else {
         return false
     }

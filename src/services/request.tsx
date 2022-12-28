@@ -1,4 +1,6 @@
 import { isEmpty } from "../utils/İndex"
+import { v4 as uuidv4 } from 'uuid';
+import useSiteStore from "../store/site"
 
 function parseData(data) {
     const formData = new FormData()
@@ -8,7 +10,7 @@ function parseData(data) {
     return formData
 }
 
-function showErrorMessage(error) {
+function getErrorMessage(error) {
     let message = error.message || 'Bir hata oluştu!'
     if (error?.statusCode === 401) {
         message = "Giriş Hatası!"
@@ -16,7 +18,7 @@ function showErrorMessage(error) {
         message = "Sunucu Hatası!"
     }
 
-    alert(`${message}`)
+    return message
 }
 
 function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
@@ -48,11 +50,11 @@ function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
                 
                 resolve(result)
             } else {
-                showErrorMessage(result)
+                await useSiteStore.setState(state => ({ errors: [...state.errors, {id: uuidv4(), message: getErrorMessage(result)}] }))
                 reject(result)
             }
         } catch (error: any) {
-            showErrorMessage(error)
+            await useSiteStore.setState(state => ({ errors: [...state.errors, {id: uuidv4(), message: getErrorMessage(error)}] }))
             reject(error)
         }
     })

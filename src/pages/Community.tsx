@@ -13,7 +13,7 @@ import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai"
 import { BsFillChatLeftTextFill } from "react-icons/bs"
 
 const Community = (props) => {
-  const [modalIsShown, setModalIsShown] = useState(false);
+  // const [modalIsShown, setModalIsShown] = useState(false);
   const [users, setUsers] = useState([]);
 
   /* const showModalHandler = () => {
