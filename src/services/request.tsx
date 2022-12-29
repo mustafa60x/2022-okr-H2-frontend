@@ -1,4 +1,4 @@
-import { isEmpty } from "../utils/İndex"
+import { isEmpty } from "../utils/Index"
 import { v4 as uuidv4 } from 'uuid';
 import useSiteStore from "../store/site"
 
