@@ -142,7 +142,7 @@ const Community = (props) => {
                   className={classNames({
                     "w-5 h-5 rounded transition-all border flex items-center justify-center":
                       true,
-                    "border-gray-300 text-transparent":
+                    "border-slate-500 text-transparent":
                       !selectedLevels.includes(option.key),
                     "border-blue-600 bg-blue-600 text-white":
                       selectedLevels.includes(option.key),

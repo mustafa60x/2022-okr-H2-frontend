@@ -14,6 +14,11 @@ import { useAuth } from "../context";
 import AuthLayout from "../pages/AuthLayout";
 import { isEmpty } from "../utils/İndex";
 
+import * as socketIO from 'socket.io-client';
+
+
+let socket
+
 function PageRouters() {
   const accessToken = !isEmpty(localStorage.getItem('accessToken')) ? JSON.parse(localStorage.getItem('accessToken')) : false
 
@@ -25,16 +30,31 @@ function PageRouters() {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("isAuth");
+  } else {
+    socket = socketIO.connect(
+      process.env.NODE_ENV !== 'production' ? 'http://localhost:8081' : 'https://test.com',
+      {
+        // reconnect: true,
+        secure: true,
+        transports: ['websocket', 'xhr-polling'],
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 1000,
+        query: {
+          accessToken: accessToken ? accessToken : '',
+          // refreshtoken: $cookies.get('refreshToken') || '',
+        },
+      }
+    )
   }
 
   return (
     <div>
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Layout socket={socket} />}>
                 <Route index element={isLoggedIn ? <Community /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="community" element={isLoggedIn ? <Community /> : (<Navigate to="/auth/login"/>)} />
-                <Route path="messages" element={isLoggedIn ? <Messages /> : (<Navigate to="/auth/login"/>)} />
+                <Route path="messages" element={isLoggedIn ? <Messages socket={socket} /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="profile" element={isLoggedIn ? <Profile /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="profile/:id" element={isLoggedIn ? <ProfileDetail /> : (<Navigate to="/auth/login"/>)} />
             </Route>

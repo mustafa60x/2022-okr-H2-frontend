@@ -27,7 +27,7 @@ function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
             const BASE_URL = import.meta.env.VITE_APP_API_URL + url
 
             // const token = window["accessToken"] ? window["accessToken"] : 'dummy_token'
-            const token = !isEmpty(localStorage.getItem('accessToken')) ? JSON.parse(localStorage.getItem('accessToken')) : 'dummy_token'
+            const token = !isEmpty(localStorage.getItem('accessToken')) ? JSON.parse(localStorage.getItem('accessToken')) : ''
 
             const headers = new Headers()
             headers.append('Content-type', 'application/json')
