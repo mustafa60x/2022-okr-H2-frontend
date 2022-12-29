@@ -14,6 +14,8 @@ const useStore = create((set: any, get: any) => ({
     destroyAllSuccesses: () => set(state => ({ successes: [] })),
     isLoading: true,
     setLoading: (status) => set(state => ({ isLoading: status })),
+    socket: undefined,
+    setSocket: (socket) => set(state => ({ socket: socket })),
 }))
 
 export default useStore;

@@ -10,18 +10,43 @@ import SuccessMessagePopup from "../components/SuccessMessagePopup";
 import { useAuth, useSite } from "../context";
 import { UserService } from "../services";
 
-import useUserStore from "../store/user"
+import useUserStore from "../store/user";
 
-const Layout = () => {
+
+const Layout = ({socket}) => {
+
   const { theme, dispatch } = useSite();
-  
+
   const { user } = useAuth() as any;
-  const { setUser } = useUserStore(state => state)
+  const { setUser } = useUserStore((state) => state);
+
+  
+  
 
   useEffect(() => {
-    UserService.getUserDetail(user._id).then((data: any) => {
-      setUser({...data})
-    });
+    if(socket) {
+      // Sockets
+      socket.on("connect", () => {
+        console.log("socket bağlandı... :)");
+      });
+      socket.on("disconnect", () => {
+        console.log("socket disconnect... :)");
+      });
+
+      socket.on("pong", () => {
+        console.log("socket pong... :)");
+      });
+
+      UserService.getUserDetail(user._id).then((data: any) => {
+        setUser({ ...data });
+      });
+
+      return () => {
+        socket.off("connect");
+        socket.off("disconnect");
+        socket.off("pong");
+      };
+    }
   }, []);
 
   return (
@@ -30,11 +55,13 @@ const Layout = () => {
         <Navbar></Navbar>
       </div>
 
-      <div className={classNames({
-        "main": true,
-        "bg-gray-300": theme === "dark",
-        "bg-gray-100": theme === "light",
-      })}>
+      <div
+        className={classNames({
+          main: true,
+          "bg-gray-300": theme === "dark",
+          "bg-gray-100": theme === "light",
+        })}
+      >
         <Container>
           <Loading></Loading>
           <SuccessMessagePopup></SuccessMessagePopup>
@@ -42,7 +69,6 @@ const Layout = () => {
 
           <Outlet></Outlet>
         </Container>
-        
       </div>
     </>
   );
