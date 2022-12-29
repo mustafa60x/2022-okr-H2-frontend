@@ -38,3 +38,28 @@ npm run dev
 - zustand
 - tailwindcss
 - socket.io-client
+
+## Screens
+
+![3](https://user-images.githubusercontent.com/14320133/210019848-f9f6eb1f-99f0-4b45-8e0d-96c533482269.PNG)
+
+![1](https://user-images.githubusercontent.com/14320133/210019877-23aac8ed-e8f6-4f4b-ae3c-cdaad0f1125f.PNG)
+
+![2](https://user-images.githubusercontent.com/14320133/210019907-3677ce1b-db0d-46a9-8f20-401f4cf1d7ed.PNG)
+
+![9](https://user-images.githubusercontent.com/14320133/210019924-efc53677-7648-4742-9b0c-587353b6db89.PNG)
+
+![11](https://user-images.githubusercontent.com/14320133/210019947-40f3c5e4-f68b-46cb-bbfd-eff30b07b23e.PNG)
+
+![10](https://user-images.githubusercontent.com/14320133/210019951-3bd03003-49bc-40ac-b37a-c94f557236ed.PNG)
+
+![4](https://user-images.githubusercontent.com/14320133/210019999-75708146-317e-4507-9f8a-25c4a00019c4.PNG)
+
+![5](https://user-images.githubusercontent.com/14320133/210020000-6493ace1-1bdc-4bec-af97-4ba8b9a82d75.PNG)
+
+![6](https://user-images.githubusercontent.com/14320133/210020001-6ce07f25-00ae-4cf1-aec1-9a37d0488c8b.PNG)
+
+![7](https://user-images.githubusercontent.com/14320133/210019992-4254f02c-9322-49b1-ab26-3a36d9f407ec.PNG)
+
+![8](https://user-images.githubusercontent.com/14320133/210019995-c5e3eb4a-b96f-4990-8047-3fd34b3ee26c.PNG)
+
