@@ -16,20 +16,8 @@ import { isEmpty } from "../utils/İndex";
 
 import * as socketIO from 'socket.io-client';
 
-const socket = socketIO.connect(
-  process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : 'https://test.com',
-  {
-    // reconnect: true,
-    secure: true,
-    transports: ['websocket', 'xhr-polling'],
-    reconnectionDelay: 1000,
-    reconnectionAttempts: 1000,
-    query: {
-      accesstoken: 'Bearer 123213',
-      // refreshtoken: $cookies.get('refreshToken') || '',
-    },
-  }
-)
+
+let socket
 
 function PageRouters() {
   const accessToken = !isEmpty(localStorage.getItem('accessToken')) ? JSON.parse(localStorage.getItem('accessToken')) : false
@@ -42,6 +30,21 @@ function PageRouters() {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("isAuth");
+  } else {
+    socket = socketIO.connect(
+      process.env.NODE_ENV !== 'production' ? 'http://localhost:8081' : 'https://test.com',
+      {
+        // reconnect: true,
+        secure: true,
+        transports: ['websocket', 'xhr-polling'],
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 1000,
+        query: {
+          accessToken: accessToken ? accessToken : '',
+          // refreshtoken: $cookies.get('refreshToken') || '',
+        },
+      }
+    )
   }
 
   return (
