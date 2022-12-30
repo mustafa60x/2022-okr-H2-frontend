@@ -12,7 +12,7 @@ import Signup from "../pages/Signup";
 
 import { useAuth } from "../context";
 import AuthLayout from "../pages/AuthLayout";
-import { isEmpty } from "../utils/İndex";
+import { isEmpty } from "../utils/Index";
 
 import * as socketIO from 'socket.io-client';
 

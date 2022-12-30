@@ -1,5 +1,5 @@
 import useSiteStore from "../store/site"
-import { isEmpty } from "../utils/İndex";
+import { isEmpty } from "../utils/Index";
 
 function ErrorMessagePopup() {
   const { errors, removeError, destroyAllErrors } = useSiteStore(state => state)

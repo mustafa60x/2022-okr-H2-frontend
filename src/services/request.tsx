@@ -1,4 +1,4 @@
-import { isEmpty } from "../utils/İndex"
+import { isEmpty } from "../utils/Index"
 import { v4 as uuidv4 } from 'uuid';
 import useSiteStore from "../store/site"
 
@@ -13,9 +13,11 @@ function parseData(data) {
 function getErrorMessage(error) {
     let message = error.message || 'Bir hata oluştu!'
     if (error?.statusCode === 401) {
-        message = "Giriş Hatası!"
+        message = error.message
     } else if(error?.statusCode === 500) {
-        message = "Sunucu Hatası!"
+        message = error.message || 'Sunucu hatası!'
+    } else if(error.message === 'Failed to fetch') {
+        message = 'İstek sunucuya erişemiyor!'
     }
 
     return message
@@ -57,6 +59,8 @@ function request(url, data = false, method = 'GET', type = 'FORM_DATA') {
                 reject(result)
             }
         } catch (error: any) {
+            useSiteStore.setState(state => ({ isLoading: false }))
+
             await useSiteStore.setState(state => ({ errors: [...state.errors, {id: uuidv4(), message: getErrorMessage(error)}] }))
             reject(error)
         }
