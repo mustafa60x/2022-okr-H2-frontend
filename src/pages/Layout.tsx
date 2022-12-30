@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import Container from "../components/Container";
 import ErrorMessagePopup from "../components/ErrorMessagePopup";
@@ -11,6 +11,7 @@ import { useAuth, useSite } from "../context";
 import { UserService } from "../services";
 
 import useUserStore from "../store/user";
+import useSiteStore from "../store/site";
 
 
 const Layout = ({socket}) => {
@@ -20,7 +21,16 @@ const Layout = ({socket}) => {
   const { user } = useAuth() as any;
   const { setUser } = useUserStore((state) => state);
 
-  
+  const { destroyAllErrors } = useSiteStore(state => state)
+
+  let location = useLocation()
+
+  useEffect(
+    () => {
+      destroyAllErrors()
+    },
+    [location]
+  )
   
 
   useEffect(() => {
