@@ -12,7 +12,7 @@ import Signup from "../pages/Signup";
 
 import { useAuth } from "../context";
 import AuthLayout from "../pages/AuthLayout";
-import { isEmpty } from "../utils/Index";
+import { isEmpty } from "../utils/index";
 
 import * as socketIO from 'socket.io-client';
 
@@ -52,8 +52,8 @@ function PageRouters() {
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<Layout socket={socket} />}>
-                <Route index element={isLoggedIn ? <Community /> : (<Navigate to="/auth/login"/>)} />
-                <Route path="community" element={isLoggedIn ? <Community /> : (<Navigate to="/auth/login"/>)} />
+                <Route index element={isLoggedIn ? <Community socket={socket} /> : (<Navigate to="/auth/login"/>)} />
+                <Route path="community" element={isLoggedIn ? <Community socket={socket} /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="messages" element={isLoggedIn ? <Messages socket={socket} /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="profile" element={isLoggedIn ? <Profile /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="profile/:id" element={isLoggedIn ? <ProfileDetail /> : (<Navigate to="/auth/login"/>)} />
