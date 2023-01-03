@@ -53,14 +53,17 @@ const Layout = ({socket}) => {
         socket.on("pong", () => {
           console.log("socket pong... :)");
         });
-  
-        return () => {
-          socket.off("connect");
-          socket.off("disconnect");
-          socket.off("pong");
-        };
       }
     })()
+
+    return () => {
+      console.log('Layout unmounting')
+      if (socket) {
+        socket.off("connect");
+        socket.off("disconnect");
+        socket.off("pong");
+      }
+    };
   }, []);
 
   return (

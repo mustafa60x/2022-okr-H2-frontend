@@ -17,7 +17,6 @@ import { RoomService } from "../services";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context";
 
-
 const Messages = ({ socket }) => {
   const {
     messages,
@@ -49,7 +48,7 @@ const Messages = ({ socket }) => {
     GENERAL_CHAT_ID: any;
   } = useMessageStore((state) => state);
 
-  const messageStore = useMessageStore(state => state)
+  const messageStore = useMessageStore((state) => state);
 
   const userId = selectedUser?._id;
 
@@ -68,14 +67,13 @@ const Messages = ({ socket }) => {
 
     const foundedSelectedUser = room?.participants?.filter(
       (item) => item._id !== user._id
-    )[0]
+    )[0];
 
-    if(foundedSelectedUser) {
-      setSelectedUser(foundedSelectedUser)
+    if (foundedSelectedUser) {
+      setSelectedUser(foundedSelectedUser);
     } else {
-      setSelectedUser({ _id: GENERAL_CHAT_ID })
+      setSelectedUser({ _id: GENERAL_CHAT_ID });
     }
-
 
     if (room._id === GENERAL_CHAT_ID) {
       socket.emit("joined_general_chat");
@@ -92,9 +90,9 @@ const Messages = ({ socket }) => {
   };
 
   const getSelectedUser = () => {
-    console.log('selectedUser', selectedUser)
-    return selectedUser
-  }
+    console.log("selectedUser", selectedUser);
+    return selectedUser;
+  };
 
   useEffect(() => {
     inputMessageRef.current.value = "";
@@ -110,12 +108,19 @@ const Messages = ({ socket }) => {
             socketID: socket.id,
           }); */
 
-          if(selectedRoom?._id === GENERAL_CHAT_ID) {
-            socket.emit("send_message_general_chat", { text: inputMessage, roomId: selectedRoom?._id, receiverId: selectedUser?._id });
+          if (selectedRoom?._id === GENERAL_CHAT_ID) {
+            socket.emit("send_message_general_chat", {
+              text: inputMessage,
+              roomId: selectedRoom?._id,
+              receiverId: selectedUser?._id,
+            });
           } else {
-            socket.emit("send_private_message", { text: inputMessage, roomId: selectedRoom?._id, receiverId: selectedUser?._id });
+            socket.emit("send_private_message", {
+              text: inputMessage,
+              roomId: selectedRoom?._id,
+              receiverId: selectedUser?._id,
+            });
           }
-
         }
         // socket send message
         // mesaj socket'e gider ve orada database'e yazılır, sonra kullanıcılara mesaj gönderilir ve ekrana basılır
@@ -146,94 +151,92 @@ const Messages = ({ socket }) => {
   }, [messages]);
 
   useEffect(() => {
-    async function getAsyncFunc() {
-      // odaları listele
-      let roomResults = (await RoomService.getUserRooms(user._id)) as any;
-      roomResults = roomResults?.map(room => {
-        return {
-          ...room,
-          participantIds: room.participants.map(item => item._id)
+    RoomService.getUserRooms(user._id)
+      .then((roomResults: any) => {
+        // odaları listele
+        roomResults = roomResults?.map((room) => {
+          return {
+            ...room,
+            participantIds: room.participants.map((item) => item._id),
+          };
+        });
+        setAllRooms(roomResults);
+
+        const roomIds = roomResults.map((room) => room?._id);
+        // oradalara join yap
+        roomIds?.map((id) => socket.emit("join_to_room", { roomId: id }));
+
+        let foundedRoom;
+        if (userId) {
+          foundedRoom = roomResults.filter(
+            (room) =>
+              room.participantIds.includes(userId) &&
+              room.participantIds.includes(user._id)
+          )[0];
+        } else {
+        }
+
+        // setLoading(true)
+
+        let selectedUserLeftSide;
+        if (foundedRoom) {
+          const foundedSelectedUser = foundedRoom?.participants?.filter(
+            (item) => item._id !== user._id
+          )[0];
+          console.log({ foundedSelectedUser });
+
+          selectedUserLeftSide = foundedSelectedUser;
+
+          const newRoom = { ...foundedRoom };
+          selectRoom(newRoom);
+          setSelectedUser(foundedSelectedUser);
+        } else {
+          selectedUserLeftSide = { _id: GENERAL_CHAT_ID };
+
+          selectRoom(selectedUserLeftSide);
+          setSelectedUser(selectedUserLeftSide);
+        }
+
+        if (socket) {
+          // Sockets
+          socket.on("entered_to_general_chat", (msg) => {
+            /* if(msg.roomId === selectRoom._id) {
+
+    } */
+            if (selectedUser?._id === GENERAL_CHAT_ID) {
+              addMessage(msg);
+            }
+          });
+
+          socket.on("received_message_from_general_chat", function (data) {
+            {
+              console.log("general", data);
+              /* if(msg.roomId === selectRoom._id) {
+
+      } */
+              /* if(selectedUser?._id === GENERAL_CHAT_ID) {
+        addMessage(msg);
+      } */
+              addMessage(data);
+            }
+          });
+
+          socket.on("receive_private_message", (data) => {
+            console.log("private", data);
+            addMessage(data);
+          });
         }
       })
-      setAllRooms(roomResults);
+      .catch(() => {});
 
-      const roomIds = roomResults.map((room) => room?._id)
-      // oradalara join yap
-      roomIds?.map(id => socket.emit('join_to_room', { roomId: id }))
-
-
-      let foundedRoom;
-      if(userId) {
-        foundedRoom = roomResults.filter(
-          (room) => room.participantIds.includes(userId) && room.participantIds.includes(user._id)
-        )[0];
-      } else {
-
-      }
-      
-      
-      // setLoading(true)
-
-
-      let selectedUserLeftSide
-      if(foundedRoom) {
-        const foundedSelectedUser = foundedRoom?.participants?.filter(
-          (item) => item._id !== user._id
-        )[0]
-        console.log({foundedSelectedUser})
-
-        selectedUserLeftSide = foundedSelectedUser
-
-        const newRoom = { ...foundedRoom }
-        selectRoom(newRoom);
-        setSelectedUser(foundedSelectedUser)
-      } else {
-        selectedUserLeftSide = { _id: GENERAL_CHAT_ID }
-
-        selectRoom(selectedUserLeftSide);
-        setSelectedUser(selectedUserLeftSide)
-      }
-
-
-      if (socket) {
-        
-        // Sockets
-        socket.on("entered_to_general_chat", (msg) => {
-          /* if(msg.roomId === selectRoom._id) {
-  
-          } */
-          if(selectedUser?._id === GENERAL_CHAT_ID) {
-            addMessage(msg);
-          }
-        });
-
-        socket.on("received_message_from_general_chat", function (data) {
-          {
-            console.log('general', data)
-            /* if(msg.roomId === selectRoom._id) {
-  
-            } */
-            /* if(selectedUser?._id === GENERAL_CHAT_ID) {
-              addMessage(msg);
-            } */
-            addMessage(data);
-          }
-        });
-
-        socket.on("receive_private_message", (data) => {
-          console.log('private', data)
-          addMessage(data);
-        });
-
-        return () => {
-          console.log('websocket unmounting')
+      return () => {
+        if (socket) {
+          console.log("websocket unmounting");
           socket.off("entered_to_general_chat");
           socket.off("received_message_from_general_chat");
           socket.off("receive_private_message");
-        };
-      }
-    }
-    getAsyncFunc()
+        }
+      };
   }, []);
 
   return (
@@ -314,7 +317,7 @@ const Messages = ({ socket }) => {
                     </span>
 
                     <span className="text-slate-500 text-xs italic font-medium dark:text-slate-400 truncate150">
-                      { room.messages[0].text }
+                      {room.messages[0].text}
                     </span>
                   </div>
                 </div>
