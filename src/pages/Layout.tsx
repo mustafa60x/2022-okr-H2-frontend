@@ -34,29 +34,33 @@ const Layout = ({socket}) => {
   
 
   useEffect(() => {
-    if(socket) {
-      // Sockets
-      socket.on("connect", () => {
-        console.log("socket bağlandı... :)");
-      });
-      socket.on("disconnect", () => {
-        console.log("socket disconnect... :)");
-      });
-
-      socket.on("pong", () => {
-        console.log("socket pong... :)");
-      });
-
-      UserService.getUserDetail(user._id).then((data: any) => {
+    
+    (async () => {
+      console.log('layout')
+      await UserService.getUserDetail(user._id).then((data: any) => {
         setUser({ ...data });
       });
-
-      return () => {
-        socket.off("connect");
-        socket.off("disconnect");
-        socket.off("pong");
-      };
-    }
+  
+      if(socket) {
+        // Sockets
+        socket.on("connect", () => {
+          console.log("socket bağlandı... :)");
+        });
+        socket.on("disconnect", () => {
+          console.log("socket disconnect... :)");
+        });
+  
+        socket.on("pong", () => {
+          console.log("socket pong... :)");
+        });
+  
+        return () => {
+          socket.off("connect");
+          socket.off("disconnect");
+          socket.off("pong");
+        };
+      }
+    })()
   }, []);
 
   return (

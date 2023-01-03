@@ -18,9 +18,9 @@ import { FiCheck } from "react-icons/fi";
 
 import useUserStore from "../store/user";
 import useSiteStore from "../store/site";
-import useMessageStore from "../store/message"
+import useMessageStore from "../store/message";
 
-const Community = (props) => {
+const Community = ({ socket }) => {
   const levels = [
     { key: "jr", value: "Jr. Developer" },
     { key: "sr", value: "Sr. Developer" },
@@ -36,7 +36,16 @@ const Community = (props) => {
   // Stores
   const { user }: { user: any } = useUserStore((state) => state);
   const { setLoading } = useSiteStore((state) => state);
-  const { messages, setAllMessages, selectedUser, setSelectedUser, addMessage, destroyAllMessages, addUser } = useMessageStore(state => state)
+  const {
+    messages,
+    setAllMessages,
+    selectedUser,
+    setSelectedUser,
+    setSelectedRoom,
+    addMessage,
+    destroyAllMessages,
+    addUser,
+  } = useMessageStore((state) => state);
 
   const selectLevel = (selectedLevel) => {
     // Yoksa ekle, varsa çıkar
@@ -57,28 +66,34 @@ const Community = (props) => {
     setGender(e.target.value);
   };
 
-  const sendMessage = (user) => {
+  const sendMessage = async (user) => {
     // TODO message yaz ve sonra messages sayfasına git
-      // TODO seçilenin id'sini storeda tut ve message sayfasında tekrar kullan
-      console.log(user);
-      setSelectedUser({...user})
-      addUser(user)
-      navigate("/messages");
+    // TODO seçilenin id'sini storeda tut ve message sayfasında tekrar kullan
+    console.log(user);
+
+    // INFO: istek at, daha önce konuşma yoksa yeni konuşma oluştur.
+    socket.emit("start_chat", user, (room) => {
+      if (room) {
+        setSelectedUser({ ...user });
+        setSelectedRoom({ ...room });
+        // addUser(user);
+        navigate("/messages");
+      }
+    });
   };
 
   const openProfileDetail = (user) => {
     navigate(`/profile/${user._id}`);
-  }
+  };
 
   useEffect(() => {
     const identifier = setTimeout(() => {
-      
-      setLoading(true)
-      useSiteStore.setState(state => ({ isLoading: true }))
+      setLoading(true);
+      useSiteStore.setState((state) => ({ isLoading: true }));
       UserService.searchUsers({ search, levels: selectedLevels, gender }).then(
         (data: any) => {
-          setUsers(data)
-          setLoading(false)
+          setUsers(data);
+          setLoading(false);
         }
       );
     }, 500);
@@ -89,9 +104,10 @@ const Community = (props) => {
     };
   }, [search, selectedLevels, gender]);
 
-  /* useEffect(() => {
-    UserService.getUsers().then((data: any) => setUsers(data))
-  }, []) */
+  useEffect(() => {
+    console.log('community')
+    // UserService.getUsers().then((data: any) => setUsers(data))
+  }, [])
 
   return (
     <div>
@@ -176,7 +192,10 @@ const Community = (props) => {
                 className="border-slate-400 border p-2 h-20 my-2 flex justify-between items-center rounded-lg"
               >
                 <div className="flex justify-start items-center">
-                  <span onClick={() => openProfileDetail(userItem)} className="flex justify-start items-center cursor-pointer">
+                  <span
+                    onClick={() => openProfileDetail(userItem)}
+                    className="flex justify-start items-center cursor-pointer"
+                  >
                     <img
                       src={userItem.gender === 1 ? woman : man}
                       className="h-10 w-10"
