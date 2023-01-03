@@ -246,8 +246,6 @@ const Messages = ({ socket }) => {
       </Helmet>
 
       <PageTitle title="Mesajlar" bgColor="#86efac" color="#584b85"></PageTitle>
-      {/* {JSON.stringify(selectedUser)} */}
-      <button onClick={() => getSelectedUser()}>Tıklaa</button>
 
       <div
         id="chatBox"

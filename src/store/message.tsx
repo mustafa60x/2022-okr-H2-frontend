@@ -10,11 +10,23 @@ const useStore = create((set: any, get: any) => ({
 
     messages: [],
     addMessage: (message) => set(state => {
+        // sol taraftaki listedeki mesaj kısmını da update et
+        // odayı bul
+
+        const mappedRooms = state.rooms?.map(room => {
+            return {
+                ...room,
+                messages: room?._id === message.roomId ? [message] : room.messages
+            }
+        })
+
+
+        // update messages
         if(state.selectedRoom?._id === message.roomId) {
-            return { messages: [...state.messages, message] }
+            return { messages: [...state.messages, message], rooms: mappedRooms }
         }
 
-        return { messages: state.messages }
+        return { messages: state.messages, rooms: mappedRooms }
     }),
     setAllMessages: (messages) => set({ messages: messages }),
     destroyAllMessages: () => set({ messages: [] }),
