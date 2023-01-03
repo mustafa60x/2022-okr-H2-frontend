@@ -1,7 +1,9 @@
 import create from "zustand"
+import useNotificationStore from "../store/notification";
 
+const GENERAL_CHAT_ID = "000111"
 const useStore = create((set: any, get: any) => ({
-    GENERAL_CHAT_ID: "000111",
+    GENERAL_CHAT_ID: GENERAL_CHAT_ID,
     selectedUser: {}, // default id for general chat ex: 000111
     setSelectedUser: (data) => set({ selectedUser: data }),
 
@@ -10,20 +12,30 @@ const useStore = create((set: any, get: any) => ({
 
     messages: [],
     addMessage: (message) => set(state => {
-        // sol taraftaki listedeki mesaj kısmını da update et
-        // odayı bul
 
+        // mapped
         const mappedRooms = state.rooms?.map(room => {
             return {
                 ...room,
+                // kullanıcı listesi ekranında last message alanını günceller
                 messages: room?._id === message.roomId ? [message] : room.messages
             }
         })
+
+        if(message.roomId === state.GENERAL_CHAT_ID && message.type === "message") {
+            message["text"] = message.username + ": " + message.text
+        }
 
 
         // update messages
         if(state.selectedRoom?._id === message.roomId) {
             return { messages: [...state.messages, message], rooms: mappedRooms }
+        } else {
+            // mesajın sahibi seçili user değilse notification oluştur
+            if(message.roomId !== state.GENERAL_CHAT_ID && message.type === "message") {
+                const currentCounter = useNotificationStore.getState().counter
+                useNotificationStore.setState((state) => ({ counter: currentCounter + 1 }))
+            }
         }
 
         return { messages: state.messages, rooms: mappedRooms }
