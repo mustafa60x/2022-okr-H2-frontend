@@ -25,6 +25,7 @@ const Messages = ({ socket }) => {
     addMessage,
     addRoom,
     destroyAllMessages,
+    destroyAllRooms,
     users,
     rooms,
     setAllUsers,
@@ -42,6 +43,7 @@ const Messages = ({ socket }) => {
     addMessage: any;
     addRoom: any;
     destroyAllMessages: any;
+    destroyAllRooms: any;
     users: any;
     rooms: any;
     setAllUsers: any;
@@ -65,11 +67,17 @@ const Messages = ({ socket }) => {
   const [inputMessage, setInputMessage] = useState("");
 
   const inputMessageRef = useRef(null);
+  
+  const resetDatas = () => {
+    destroyAllMessages();
+    destroyAllRooms();
+    setSelectedRoom({ _id: GENERAL_CHAT_ID })
+    setSelectedUser({ _id: GENERAL_CHAT_ID })
+  }
 
-  const selectRoom = (room) => {
+  const selectRoom = async (room) => {
     destroyAllMessages();
     setSelectedRoom(room);
-
     updateRoom(room._id, {
       isRead: true
     })
@@ -84,11 +92,17 @@ const Messages = ({ socket }) => {
       setSelectedUser({ _id: GENERAL_CHAT_ID });
     }
 
-    if (room._id === GENERAL_CHAT_ID) {
+    if (room?._id === GENERAL_CHAT_ID) {
       socket.emit("joined_general_chat");
     } else {
       // kullanıcı seçildi!
-      socket.emit("message", "hi everyone");
+      socket.emit("join_to_room", { roomId: room?._id }) // burası eklenmeyedebilirdi..
+      // socket.emit("message", "hi everyone");
+
+      // Message Service isteği at
+      const roomdetail = await RoomService.getRoomDetail(room?._id) as any
+
+      setAllMessages(roomdetail.messages)
     }
   };
 
@@ -96,11 +110,6 @@ const Messages = ({ socket }) => {
     if (event.key === "Enter") {
       setInputMessage(inputMessageRef.current.value);
     }
-  };
-
-  const getSelectedUser = () => {
-    console.log("selectedUser", selectedUser);
-    return selectedUser;
   };
 
   useEffect(() => {
@@ -209,15 +218,12 @@ const Messages = ({ socket }) => {
 
         if (socket) {
           // Sockets
-          socket.on(`new_request:${user._id}`, (data) => {
+          /* socket.on(`new_request:${user._id}`, (data) => {
             // Room alanına ekle
             addRoom(data)
           });
 
           socket.on("entered_to_general_chat", (msg) => {
-            /* if(msg.roomId === selectRoom._id) {
-
-    } */
             if (selectedUser?._id === GENERAL_CHAT_ID) {
               addMessage(msg);
             }
@@ -225,23 +231,14 @@ const Messages = ({ socket }) => {
 
           socket.on("received_message_from_general_chat", function (data) {
             {
-              console.log("general", data);
-              /* if(msg.roomId === selectRoom._id) {
-
-      } */
-              /* if(selectedUser?._id === GENERAL_CHAT_ID) {
-        addMessage(msg);
-      } */
               addMessage(data);
             }
           });
 
           socket.on("receive_private_message", (data) => {
-            console.log("private", data);
             addMessage(data);
-
             setTopToRoom(data.roomId)
-          });
+          }); */
         }
       })
       .catch(() => {});
@@ -250,10 +247,12 @@ const Messages = ({ socket }) => {
         if (socket) {
           console.log("websocket unmounting");
 
-          socket.off(`new_request:${user._id}`);
+          resetDatas()
+
+          /* socket.off(`new_request:${user._id}`);
           socket.off("entered_to_general_chat");
           socket.off("received_message_from_general_chat");
-          socket.off("receive_private_message");
+          socket.off("receive_private_message"); */
         }
       };
   }, []);
@@ -402,13 +401,12 @@ const Messages = ({ socket }) => {
                     className={classNames({
                       flex: true,
                       "justify-end":
-                        message.ownerId === user._id &&
+                        message.senderId === user._id &&
                         message.type === "message",
                       "justify-start":
-                        message.ownerId !== user._id &&
+                        message.senderId !== user._id &&
                         message.type === "message",
-                      "justify-center":
-                        message.ownerId !== user._id && message.type === "join",
+                      "justify-center": message.type === "join",
                     })}
                     key={key}
                   >
@@ -419,10 +417,10 @@ const Messages = ({ socket }) => {
                         "p-1 m-1 text-xs bg-slate-300 text-white":
                           message.type === "join",
                         "bg-blue-200 text-[#252424]":
-                          message.ownerId === user._id &&
+                          message.senderId === user._id &&
                           message.type === "message",
                         "bg-[#ededed] text-[#252424]":
-                          message.ownerId !== user._id &&
+                          message.senderId !== user._id &&
                           message.type === "message",
                       })}
                     >

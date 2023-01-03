@@ -27,3 +27,13 @@ npm i react-icons
 
 ## Helmet
 npm i react-helmet
+
+
+## Links
+
+### react router
+- https://ultimatecourses.com/blog/query-strings-search-params-react-router
+- https://v5.reactrouter.com/web/example/query-parameters
+
+### javascript
+- https://stackoverflow.com/questions/23921683/javascript-move-an-item-of-an-array-to-the-front

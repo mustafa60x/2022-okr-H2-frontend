@@ -12,6 +12,7 @@ import { UserService } from "../services";
 
 import useUserStore from "../store/user";
 import useSiteStore from "../store/site";
+import useMessageStore from "../store/message";
 
 
 const Layout = ({socket}) => {
@@ -22,6 +23,13 @@ const Layout = ({socket}) => {
 
   const { setUser } = useUserStore((state) => state);
   const { destroyAllErrors } = useSiteStore(state => state)
+  const {
+  selectedUser,
+  addMessage,
+  addRoom,
+  setTopToRoom,
+  GENERAL_CHAT_ID,
+} = useMessageStore((state) => state) as any;
 
   const [mounted, setMounted] = useState(false)
 
@@ -57,6 +65,29 @@ const Layout = ({socket}) => {
         socket.on("pong", () => {
           console.log("socket pong... :)");
         });
+
+        // Socket Listeners
+        socket.on(`new_request:${user._id}`, (data) => {
+          // Room alanına ekle
+          addRoom(data)
+        });
+
+        socket.on("entered_to_general_chat", (msg) => {
+          if (selectedUser?._id === GENERAL_CHAT_ID) {
+            addMessage(msg);
+          }
+        });
+
+        socket.on("received_message_from_general_chat", function (data) {
+          {
+            addMessage(data);
+          }
+        });
+
+        socket.on("receive_private_message", (data) => {
+          addMessage(data);
+          setTopToRoom(data.roomId)
+        });
       }
     })()
 
@@ -66,6 +97,11 @@ const Layout = ({socket}) => {
         socket.off("connect");
         socket.off("disconnect");
         socket.off("pong");
+        // Listeners
+        socket.off(`new_request:${user._id}`);
+        socket.off("entered_to_general_chat");
+        socket.off("received_message_from_general_chat");
+        socket.off("receive_private_message");
       }
     };
   }, []);
