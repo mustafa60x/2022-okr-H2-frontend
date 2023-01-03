@@ -1,7 +1,7 @@
 import { createContext, useContext, useReducer } from "react";
 
 import { authReducer } from "../reducer"
-import { isEmpty } from "../utils/index";
+import { isEmpty } from "../utils";
 
 const Context = createContext(null);
 

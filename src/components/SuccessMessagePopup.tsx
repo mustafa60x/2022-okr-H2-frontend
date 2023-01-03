@@ -1,5 +1,5 @@
 import useSiteStore from "../store/site"
-import { isEmpty } from "../utils/index";
+import { isEmpty } from "../utils";
 
 function SuccessMessagePopup() {
   const { successes, removeSuccess, destroyAllSuccesses } = useSiteStore(state => state)
