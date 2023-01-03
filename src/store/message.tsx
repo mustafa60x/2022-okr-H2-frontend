@@ -5,7 +5,9 @@ const GENERAL_CHAT_ID = "000111"
 const useStore = create((set: any, get: any) => ({
     GENERAL_CHAT_ID: GENERAL_CHAT_ID,
     selectedUser: {}, // default id for general chat ex: 000111
-    setSelectedUser: (data) => set({ selectedUser: data }),
+    setSelectedUser: (data) => set(() => {
+        return { selectedUser: data }
+    }),
 
     selectedRoom: {}, // default id for general chat ex: 000111
     setSelectedRoom: (data) => set({ selectedRoom: data }),
@@ -18,7 +20,8 @@ const useStore = create((set: any, get: any) => ({
             return {
                 ...room,
                 // kullanıcı listesi ekranında last message alanını günceller
-                messages: room?._id === message.roomId ? [message] : room.messages
+                messages: room?._id === message.roomId ? [message] : room.messages,
+                isRead: room?._id === message.roomId && state.selectedRoom?._id !== message.roomId ? false : true
             }
         })
 
@@ -65,8 +68,34 @@ const useStore = create((set: any, get: any) => ({
             return state.rooms
         } else {
             return {
-                rooms: [...state.rooms, room]
+                rooms: [{...room, isRead: false }, ...state.rooms]
             }
+        }
+    }),
+    updateRoom: (roomId, updatedFields) => set(state => {
+        const mappedRooms = state.rooms?.map((item => {
+            let options = {};
+
+            if(item._id === roomId) {
+                options = updatedFields
+            }
+
+            return {
+                ...item,
+                ...options,
+            }
+        }))
+
+        return {
+            rooms: [...mappedRooms]
+        }
+    }),
+    setTopToRoom: (roomId) => set(state => {
+        const first = roomId;
+        const sortedRooms = state.rooms.sort(function(x: any, y: any) { return x._id === first ? -1 : y._id === first ? 1 : 0; });
+
+        return {
+            rooms: [...sortedRooms]
         }
     }),
     setAllRooms: (rooms) => set({ rooms: rooms }),

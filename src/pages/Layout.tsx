@@ -84,7 +84,6 @@ const Layout = ({socket}) => {
         })}
       >
         <Container>
-          {mounted ? 'mounted' : 'unmounted'}
           <Loading></Loading>
           <SuccessMessagePopup></SuccessMessagePopup>
           <ErrorMessagePopup></ErrorMessagePopup>

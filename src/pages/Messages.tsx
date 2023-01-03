@@ -23,6 +23,7 @@ const Messages = ({ socket }) => {
     selectedUser,
     setSelectedUser,
     addMessage,
+    addRoom,
     destroyAllMessages,
     users,
     rooms,
@@ -30,6 +31,8 @@ const Messages = ({ socket }) => {
     setAllRooms,
     selectedRoom,
     setSelectedRoom,
+    updateRoom,
+    setTopToRoom,
     GENERAL_CHAT_ID,
   }: {
     messages: any;
@@ -37,6 +40,7 @@ const Messages = ({ socket }) => {
     selectedUser: any;
     setSelectedUser: any;
     addMessage: any;
+    addRoom: any;
     destroyAllMessages: any;
     users: any;
     rooms: any;
@@ -44,6 +48,8 @@ const Messages = ({ socket }) => {
     setAllRooms: any;
     selectedRoom: any;
     setSelectedRoom: any;
+    updateRoom: any;
+    setTopToRoom: any;
     GENERAL_CHAT_ID: any;
   } = useMessageStore((state) => state);
 
@@ -63,6 +69,10 @@ const Messages = ({ socket }) => {
   const selectRoom = (room) => {
     destroyAllMessages();
     setSelectedRoom(room);
+
+    updateRoom(room._id, {
+      isRead: true
+    })
 
     const foundedSelectedUser = room?.participants?.filter(
       (item) => item._id !== user._id
@@ -199,6 +209,11 @@ const Messages = ({ socket }) => {
 
         if (socket) {
           // Sockets
+          socket.on(`new_request:${user._id}`, (data) => {
+            // Room alanına ekle
+            addRoom(data)
+          });
+
           socket.on("entered_to_general_chat", (msg) => {
             /* if(msg.roomId === selectRoom._id) {
 
@@ -224,6 +239,8 @@ const Messages = ({ socket }) => {
           socket.on("receive_private_message", (data) => {
             console.log("private", data);
             addMessage(data);
+
+            setTopToRoom(data.roomId)
           });
         }
       })
@@ -232,6 +249,8 @@ const Messages = ({ socket }) => {
       return () => {
         if (socket) {
           console.log("websocket unmounting");
+
+          socket.off(`new_request:${user._id}`);
           socket.off("entered_to_general_chat");
           socket.off("received_message_from_general_chat");
           socket.off("receive_private_message");
@@ -283,6 +302,7 @@ const Messages = ({ socket }) => {
                     "flex items-center gap-4 p-4 border-b border-slate-300 cursor-pointer hover:bg-green-200":
                       true,
                     "bg-green-100": selectedRoom._id === room._id + "",
+                    "bg-blue-100": room.isRead === false,
                   })}
                   key={room._id}
                   onClick={() => selectRoom({ ...room })}

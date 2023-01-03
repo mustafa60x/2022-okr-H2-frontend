@@ -75,7 +75,7 @@ const Community = ({ socket }) => {
       if (room) {
         setSelectedUser({ ...user });
         setSelectedRoom({ ...room });
-        // addUser(user);
+
         navigate(`/messages?username=${user.username}`);
       }
     });
