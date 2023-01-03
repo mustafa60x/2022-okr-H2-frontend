@@ -51,7 +51,7 @@ function PageRouters() {
     <div>
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Layout socket={socket} />}>
+            <Route path="/" element={isLoggedIn ? <Layout socket={socket} /> : (<Navigate to="/auth/login"/>)}>
                 <Route index element={isLoggedIn ? <Community socket={socket} /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="community" element={isLoggedIn ? <Community socket={socket} /> : (<Navigate to="/auth/login"/>)} />
                 <Route path="messages" element={isLoggedIn ? <Messages socket={socket} /> : (<Navigate to="/auth/login"/>)} />

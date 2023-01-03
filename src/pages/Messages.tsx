@@ -7,14 +7,13 @@ import publicChat from "../assets/public_chat.png";
 import classNames from "classnames";
 
 import useMessageStore from "../store/message";
-import useUserStore from "../store/user";
 import useSiteStore from "../store/site";
 
 import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 
 import { RoomService } from "../services";
-import { useParams } from "react-router-dom";
+// import { useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context";
 
 const Messages = ({ socket }) => {
@@ -48,9 +47,9 @@ const Messages = ({ socket }) => {
     GENERAL_CHAT_ID: any;
   } = useMessageStore((state) => state);
 
-  const messageStore = useMessageStore((state) => state);
-
   const userId = selectedUser?._id;
+
+  // const [searchParams] = useSearchParams()
 
   const { setLoading } = useSiteStore((state) => state);
 
@@ -151,6 +150,7 @@ const Messages = ({ socket }) => {
   }, [messages]);
 
   useEffect(() => {
+    console.log("Messages mounted")
     RoomService.getUserRooms(user._id)
       .then((roomResults: any) => {
         // odaları listele
@@ -250,7 +250,7 @@ const Messages = ({ socket }) => {
       <div
         id="chatBox"
         className="bg-gray-200 w-full rounded-lg"
-        style={{ height: "36rem" }}
+        style={{ height: "35rem" }}
       >
         <div className="grid grid-cols-4 h-full">
           <div

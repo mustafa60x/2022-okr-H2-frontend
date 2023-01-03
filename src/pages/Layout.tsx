@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 import Container from "../components/Container";
@@ -19,9 +19,11 @@ const Layout = ({socket}) => {
   const { theme, dispatch } = useSite();
 
   const { user } = useAuth() as any;
-  const { setUser } = useUserStore((state) => state);
 
+  const { setUser } = useUserStore((state) => state);
   const { destroyAllErrors } = useSiteStore(state => state)
+
+  const [mounted, setMounted] = useState(false)
 
   let location = useLocation()
 
@@ -39,6 +41,8 @@ const Layout = ({socket}) => {
       console.log('layout')
       await UserService.getUserDetail(user._id).then((data: any) => {
         setUser({ ...data });
+
+        setMounted(true)
       });
   
       if(socket) {
@@ -80,11 +84,12 @@ const Layout = ({socket}) => {
         })}
       >
         <Container>
+          {mounted ? 'mounted' : 'unmounted'}
           <Loading></Loading>
           <SuccessMessagePopup></SuccessMessagePopup>
           <ErrorMessagePopup></ErrorMessagePopup>
 
-          <Outlet></Outlet>
+          {mounted && <Outlet></Outlet>}
         </Container>
       </div>
     </>

@@ -1,7 +1,6 @@
 import { isEmpty } from "../utils";
 import { v4 as uuidv4 } from "uuid";
 import useSiteStore from "../store/site";
-import { useAuth } from "../context";
 
 
 function parseData(data) {

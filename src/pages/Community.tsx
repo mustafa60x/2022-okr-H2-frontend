@@ -69,7 +69,6 @@ const Community = ({ socket }) => {
   const sendMessage = async (user) => {
     // TODO message yaz ve sonra messages sayfasına git
     // TODO seçilenin id'sini storeda tut ve message sayfasında tekrar kullan
-    console.log(user);
 
     // INFO: istek at, daha önce konuşma yoksa yeni konuşma oluştur.
     socket.emit("start_chat", user, (room) => {
@@ -77,7 +76,7 @@ const Community = ({ socket }) => {
         setSelectedUser({ ...user });
         setSelectedRoom({ ...room });
         // addUser(user);
-        navigate("/messages");
+        navigate(`/messages?username=${user.username}`);
       }
     });
   };
@@ -127,7 +126,7 @@ const Community = ({ socket }) => {
         <p>{import.meta.env.VITE_APP_API_URL}</p>
       </div> */}
 
-      <div className="flex justify-between mb-5 border-b-2 p-2">
+      <div className="flex flex-wrap gap-5 justify-center mb-5 border-b-2 p-2 xl:gap-1 xl:justify-between">
         <label className="block w-36">
           <select
             className="w-full h-10 border-b outline-none focus:border-black rounded"
