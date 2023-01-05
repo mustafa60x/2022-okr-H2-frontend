@@ -7,12 +7,14 @@ import publicChat from "../assets/public_chat.png";
 import classNames from "classnames";
 
 import useMessageStore from "../store/message";
-import useUserStore from "../store/user";
+import useSiteStore from "../store/site";
 
 import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 
-const GENERAL_CHAT_ID = "000111";
+import { RoomService } from "../services";
+// import { useParams, useSearchParams } from "react-router-dom";
+import { useAuth } from "../context";
 
 const Messages = ({ socket }) => {
   const {
@@ -21,34 +23,86 @@ const Messages = ({ socket }) => {
     selectedUser,
     setSelectedUser,
     addMessage,
+    addRoom,
     destroyAllMessages,
+    destroyAllRooms,
     users,
+    rooms,
+    setAllUsers,
+    setAllRooms,
+    selectedRoom,
+    setSelectedRoom,
+    updateRoom,
+    setTopToRoom,
+    GENERAL_CHAT_ID,
   }: {
     messages: any;
     setAllMessages: any;
     selectedUser: any;
     setSelectedUser: any;
     addMessage: any;
+    addRoom: any;
     destroyAllMessages: any;
+    destroyAllRooms: any;
     users: any;
+    rooms: any;
+    setAllUsers: any;
+    setAllRooms: any;
+    selectedRoom: any;
+    setSelectedRoom: any;
+    updateRoom: any;
+    setTopToRoom: any;
+    GENERAL_CHAT_ID: any;
   } = useMessageStore((state) => state);
 
-  const { user }: { user: any } = useUserStore((state) => state);
+  const userId = selectedUser?._id;
+
+  // const [searchParams] = useSearchParams()
+
+  const { setLoading } = useSiteStore((state) => state);
+
+  // const { user }: { user: any } = useUserStore((state) => state);
+  const { user } = useAuth() as any;
 
   const [inputMessage, setInputMessage] = useState("");
 
   const inputMessageRef = useRef(null);
+  
+  const resetDatas = () => {
+    destroyAllMessages();
+    destroyAllRooms();
+    setSelectedRoom({ _id: GENERAL_CHAT_ID })
+    setSelectedUser({ _id: GENERAL_CHAT_ID })
+  }
 
-  const selectUser = (key) => {
-    if (key._id !== user._id) {
-      setSelectedUser(key);
-      destroyAllMessages();
+  const selectRoom = async (room) => {
+    destroyAllMessages();
+    setSelectedRoom(room);
+    updateRoom(room._id, {
+      isRead: true
+    })
 
-      if (key._id === GENERAL_CHAT_ID) {
-        socket.emit("joined_general_chat");
-      } else {
-        socket.emit("message", "hi everyone");
-      }
+    const foundedSelectedUser = room?.participants?.filter(
+      (item) => item._id !== user._id
+    )[0];
+
+    if (foundedSelectedUser) {
+      setSelectedUser(foundedSelectedUser);
+    } else {
+      setSelectedUser({ _id: GENERAL_CHAT_ID });
+    }
+
+    if (room?._id === GENERAL_CHAT_ID) {
+      socket.emit("joined_general_chat");
+    } else {
+      // kullanıcı seçildi!
+      socket.emit("join_to_room", { roomId: room?._id }) // burası eklenmeyedebilirdi..
+      // socket.emit("message", "hi everyone");
+
+      // Message Service isteği at
+      const roomdetail = await RoomService.getRoomDetail(room?._id) as any
+
+      setAllMessages(roomdetail.messages)
     }
   };
 
@@ -65,14 +119,26 @@ const Messages = ({ socket }) => {
     const identifier = setTimeout(() => {
       if (inputMessage) {
         if (socket) {
-          socket.emit("message", {
+          /* socket.emit("message", {
             text: "selam",
             name: localStorage.getItem("userName"),
             id: `${socket.id}${Math.random()}`,
             socketID: socket.id,
-          });
+          }); */
 
-          socket.emit("send_message_general_chat", { text: inputMessage });
+          if (selectedRoom?._id === GENERAL_CHAT_ID) {
+            socket.emit("send_message_general_chat", {
+              text: inputMessage,
+              roomId: selectedRoom?._id,
+              receiverId: selectedUser?._id,
+            });
+          } else {
+            socket.emit("send_private_message", {
+              text: inputMessage,
+              roomId: selectedRoom?._id,
+              receiverId: selectedUser?._id,
+            });
+          }
         }
         // socket send message
         // mesaj socket'e gider ve orada database'e yazılır, sonra kullanıcılara mesaj gönderilir ve ekrana basılır
@@ -103,23 +169,92 @@ const Messages = ({ socket }) => {
   }, [messages]);
 
   useEffect(() => {
-    selectUser({ _id: GENERAL_CHAT_ID })
+    console.log("Messages mounted")
+    RoomService.getUserRooms(user._id)
+      .then((roomResults: any) => {
+        // odaları listele
+        roomResults = roomResults?.map((room) => {
+          return {
+            ...room,
+            participantIds: room.participants.map((item) => item._id),
+          };
+        });
+        setAllRooms(roomResults);
 
-    if (socket) {
-      // Sockets
-      socket.on("general_chat", (msg) => {
-        addMessage(msg);
-      });
+        const roomIds = roomResults.map((room) => room?._id);
+        // oradalara join yap
+        roomIds?.map((id) => socket.emit("join_to_room", { roomId: id }));
 
-      socket.on("receive_message_general_chat", (msg) => {
-        addMessage(msg);
-      });
+        let foundedRoom;
+        if (userId) {
+          foundedRoom = roomResults.filter(
+            (room) =>
+              room.participantIds.includes(userId) &&
+              room.participantIds.includes(user._id)
+          )[0];
+        } else {
+        }
+
+        // setLoading(true)
+
+        let selectedUserLeftSide;
+        if (foundedRoom) {
+          const foundedSelectedUser = foundedRoom?.participants?.filter(
+            (item) => item._id !== user._id
+          )[0];
+          console.log({ foundedSelectedUser });
+
+          selectedUserLeftSide = foundedSelectedUser;
+
+          const newRoom = { ...foundedRoom };
+          selectRoom(newRoom);
+          setSelectedUser(foundedSelectedUser);
+        } else {
+          selectedUserLeftSide = { _id: GENERAL_CHAT_ID };
+
+          selectRoom(selectedUserLeftSide);
+          setSelectedUser(selectedUserLeftSide);
+        }
+
+        if (socket) {
+          // Sockets
+          /* socket.on(`new_request:${user._id}`, (data) => {
+            // Room alanına ekle
+            addRoom(data)
+          });
+
+          socket.on("entered_to_general_chat", (msg) => {
+            if (selectedUser?._id === GENERAL_CHAT_ID) {
+              addMessage(msg);
+            }
+          });
+
+          socket.on("received_message_from_general_chat", function (data) {
+            {
+              addMessage(data);
+            }
+          });
+
+          socket.on("receive_private_message", (data) => {
+            addMessage(data);
+            setTopToRoom(data.roomId)
+          }); */
+        }
+      })
+      .catch(() => {});
 
       return () => {
-        socket.off("general_chat");
-        socket.off("receive_message_general_chat");
+        if (socket) {
+          console.log("websocket unmounting");
+
+          resetDatas()
+
+          /* socket.off(`new_request:${user._id}`);
+          socket.off("entered_to_general_chat");
+          socket.off("received_message_from_general_chat");
+          socket.off("receive_private_message"); */
+        }
       };
-    }
   }, []);
 
   return (
@@ -130,7 +265,11 @@ const Messages = ({ socket }) => {
 
       <PageTitle title="Mesajlar" bgColor="#86efac" color="#584b85"></PageTitle>
 
-      <div id="chatBox" className="bg-gray-200 w-full rounded-lg" style={{ height: "36rem"}}>
+      <div
+        id="chatBox"
+        className="bg-gray-200 w-full rounded-lg"
+        style={{ height: "35rem" }}
+      >
         <div className="grid grid-cols-4 h-full">
           <div
             id="leftSide"
@@ -138,11 +277,11 @@ const Messages = ({ socket }) => {
           >
             <div
               className={classNames({
-                "flex items-center gap-4 p-4 border-b border-slate-300 cursor-pointer hover:bg-gray-200":
+                "flex items-center gap-4 p-4 border-b border-slate-300 cursor-pointer hover:bg-green-200":
                   true,
-                "bg-green-100": selectedUser._id === GENERAL_CHAT_ID,
+                "bg-green-100": selectedUser?._id === GENERAL_CHAT_ID,
               })}
-              onClick={() => selectUser({ _id: GENERAL_CHAT_ID })}
+              onClick={() => selectRoom({ _id: GENERAL_CHAT_ID })}
             >
               <img src={publicChat} className="h-10 w-10" alt="profile" />
               <div className="flex flex-col">
@@ -155,28 +294,47 @@ const Messages = ({ socket }) => {
               </div>
             </div>
 
-            {users &&
-              users.map((userInfo, key) => (
+            {rooms &&
+              rooms.map((room, key) => (
                 <div
                   className={classNames({
-                    "flex items-center gap-4 p-4 border-b border-slate-300 cursor-pointer hover:bg-gray-200":
+                    "flex items-center gap-4 p-4 border-b border-slate-300 cursor-pointer hover:bg-green-200":
                       true,
-                    "bg-green-100": selectedUser._id === userInfo._id + "",
+                    "bg-green-100": selectedRoom._id === room._id + "",
+                    "bg-blue-100": room.isRead === false,
                   })}
-                  key={userInfo._id}
-                  onClick={() => selectUser({ ...userInfo })}
+                  key={room._id}
+                  onClick={() => selectRoom({ ...room })}
                 >
                   <img
-                    src={userInfo.gender === 1 ? woman : man}
+                    src={
+                      room.participants.filter(
+                        (item) => item._id !== user._id
+                      )[0].gender === 1
+                        ? woman
+                        : man
+                    }
                     className="h-10 w-10"
                     alt="profile"
                   />
                   <div className="flex flex-col">
                     <strong className="text-slate-900 text-sm font-medium dark:text-slate-200">
-                      {userInfo.username}
+                      {
+                        room.participants.filter(
+                          (item) => item._id !== user._id
+                        )[0].username
+                      }
                     </strong>
                     <span className="text-slate-500 text-sm font-medium dark:text-slate-400">
-                      {userInfo.level}
+                      {
+                        room.participants.filter(
+                          (item) => item._id !== user._id
+                        )[0].level
+                      }
+                    </span>
+
+                    <span className="text-slate-500 text-xs italic font-medium dark:text-slate-400 truncate150">
+                      {room.messages[0].text}
                     </span>
                   </div>
                 </div>
@@ -191,21 +349,31 @@ const Messages = ({ socket }) => {
               <div className="flex items-center gap-4 p-4 border-b border-slate-300">
                 <div className="flex justify-start items-center">
                   <img
-                    src={selectedUser?.gender ? (selectedUser?.gender === 1 ? woman : man) : publicChat}
+                    src={
+                      selectedUser?.gender
+                        ? selectedUser?.gender === 1
+                          ? woman
+                          : man
+                        : publicChat
+                    }
                     className="h-10 w-10"
                     alt="profile"
                   />
-                  <span className="ml-2 mr-3">{selectedUser.username}</span>
+                  <span className="ml-2 mr-3">{selectedUser?.username}</span>
                   <span className="ml-1 mr-5">
-                    {selectedUser?.gender ? selectedUser.gender === 1 ? (
-                      <AiOutlineWoman className="text-pink-500 h-5 w-5"></AiOutlineWoman>
+                    {selectedUser?.gender ? (
+                      selectedUser?.gender === 1 ? (
+                        <AiOutlineWoman className="text-pink-500 h-5 w-5"></AiOutlineWoman>
+                      ) : (
+                        <AiOutlineMan className="text-blue-500 h-5 w-5"></AiOutlineMan>
+                      )
                     ) : (
-                      <AiOutlineMan className="text-blue-500 h-5 w-5"></AiOutlineMan>
-                    ) : ''}
+                      ""
+                    )}
                   </span>
                   <span>
-                    {selectedUser.tags &&
-                      selectedUser.tags.map((tag: any, index: any) => (
+                    {selectedUser?.tags &&
+                      selectedUser?.tags.map((tag: any, index: any) => (
                         <span
                           className="bg-blue-600 text-white px-2 mr-1 rounded-lg"
                           key={tag._id}
@@ -216,7 +384,7 @@ const Messages = ({ socket }) => {
                   </span>
                 </div>
                 <div className="text-gray-500 p-2 truncate">
-                  {selectedUser.about}
+                  {selectedUser?.about}
                 </div>
               </div>
             </div>
@@ -225,7 +393,7 @@ const Messages = ({ socket }) => {
               id="middle"
               ref={messagesEndRef}
               className="border-2 h-full overflow-auto"
-              style={{scrollBehavior: "smooth"}}
+              style={{ scrollBehavior: "smooth" }}
             >
               {messages &&
                 messages.map((message: any, key: any) => (
@@ -233,13 +401,12 @@ const Messages = ({ socket }) => {
                     className={classNames({
                       flex: true,
                       "justify-end":
-                        message.ownerId === user._id &&
+                        message.senderId === user._id &&
                         message.type === "message",
                       "justify-start":
-                        message.ownerId !== user._id &&
+                        message.senderId !== user._id &&
                         message.type === "message",
-                      "justify-center":
-                        message.ownerId !== user._id && message.type === "join",
+                      "justify-center": message.type === "join",
                     })}
                     key={key}
                   >
@@ -247,11 +414,14 @@ const Messages = ({ socket }) => {
                       className={classNames({
                         "rounded-lg": true,
                         "p-2 m-2": message.type === "message",
-                        "p-1 m-1 text-xs bg-slate-300 text-white": message.type === "join",
+                        "p-1 m-1 text-xs bg-slate-300 text-white":
+                          message.type === "join",
                         "bg-blue-200 text-[#252424]":
-                          message.ownerId === user._id && message.type === "message",
+                          message.senderId === user._id &&
+                          message.type === "message",
                         "bg-[#ededed] text-[#252424]":
-                          message.ownerId !== user._id && message.type === "message",
+                          message.senderId !== user._id &&
+                          message.type === "message",
                       })}
                     >
                       {message.text}

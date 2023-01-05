@@ -23,6 +23,8 @@ export const isEmpty = (value) => {
         return true
     } else if (value && value.length === 0) {
         return true
+    } else if (value && Object.keys(value).length === 0 && Object.getPrototypeOf(value) === Object.prototype) {
+        return true
     } else {
         return false
     }
