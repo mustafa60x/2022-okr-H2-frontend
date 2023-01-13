@@ -43,9 +43,9 @@ npm run dev
 
 ![3](https://user-images.githubusercontent.com/14320133/210019848-f9f6eb1f-99f0-4b45-8e0d-96c533482269.PNG)
 
-![1](https://user-images.githubusercontent.com/14320133/210019877-23aac8ed-e8f6-4f4b-ae3c-cdaad0f1125f.PNG)
+![image](https://user-images.githubusercontent.com/14320133/212309895-7c265692-67e7-4fea-9f80-8f0441ef29ca.png)
 
-![2](https://user-images.githubusercontent.com/14320133/210019907-3677ce1b-db0d-46a9-8f20-401f4cf1d7ed.PNG)
+![image](https://user-images.githubusercontent.com/14320133/212310125-a23affde-f65d-4018-9745-c14408c6df87.png)
 
 ![9](https://user-images.githubusercontent.com/14320133/210019924-efc53677-7648-4742-9b0c-587353b6db89.PNG)
 
